@@ -21,7 +21,6 @@ body {
     --radius-card: 20px;
 }
 
-/* Główny kontener */
 .app-container {
     display: flex;
     flex-direction: column;
@@ -32,7 +31,6 @@ body {
     position: relative;
 }
 
-/* ========== STAŁY, ZAOKRĄGLONY HEADER ========== */
 .header {
     position: sticky;
     top: 16px;
@@ -53,7 +51,6 @@ body {
     flex-shrink: 0;
 }
 
-/* ZAWARTOŚĆ SCROLLOWANA */
 .content-scroll {
     flex: 1;
     overflow-y: auto;
@@ -63,7 +60,6 @@ body {
     gap: 28px;
 }
 
-/* Custom scrollbar */
 .content-scroll::-webkit-scrollbar {
     width: 6px;
 }
@@ -76,7 +72,6 @@ body {
     border-radius: 10px;
 }
 
-/* Logo i tytuł */
 .logo-area {
     display: flex;
     align-items: center;
@@ -107,7 +102,6 @@ body {
     background-clip: text;
 }
 
-/* Wallet panel */
 .wallet-panel {
     display: flex;
     align-items: center;
@@ -178,7 +172,6 @@ body {
 .gem-amount { color: var(--primary); font-size: 1rem; }
 .gem-symbol { color: #8b92b0; font-size: 0.7rem; }
 
-/* Trading bar */
 .trading-bar {
     background: rgba(0,0,0,0.4);
     border-radius: 40px;
@@ -193,7 +186,6 @@ body {
 .trading-text { color: #8b92b0; }
 .trading-bar.active .trading-text { color: #4caf50; }
 
-/* Hero Section */
 .hero {
     text-align: center;
     padding: 40px 20px;
@@ -216,7 +208,21 @@ body {
     font-size: 1rem;
 }
 
-/* Games Grid */
+.gem-requirement {
+    background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(0,0,0,0.3));
+    border: 1px solid var(--primary);
+    border-radius: 40px;
+    padding: 12px 24px;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.gem-requirement strong {
+    color: var(--primary);
+    font-weight: 800;
+}
+
 .games-section {
     background: rgba(8, 10, 18, 0.5);
     border-radius: 32px;
@@ -281,7 +287,6 @@ body {
     display: inline-block;
 }
 
-/* Leaderboard */
 .leaderboard-section {
     background: rgba(8, 10, 18, 0.5);
     border-radius: 32px;
@@ -346,7 +351,6 @@ body {
     color: #8b92b0;
 }
 
-/* Footer */
 .footer {
     background: rgba(10, 12, 21, 0.6);
     border-radius: 24px;
@@ -380,7 +384,6 @@ body {
     color: #8b92b0;
 }
 
-/* ========== GAME MODAL ========== */
 .game-modal {
     display: none;
     position: fixed;
@@ -459,7 +462,6 @@ body {
     min-height: 450px;
 }
 
-/* Game UI inside modal */
 .game-frame {
     width: 100%;
     height: 100%;
@@ -574,7 +576,12 @@ body {
     padding: 60px 20px;
 }
 
-/* Responsive */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
 @media (max-width: 768px) {
     .header {
         margin: 0 12px;
@@ -605,11 +612,4 @@ body {
     .game-card h4 { font-size: 0.9rem; }
     .stat-value { font-size: 1rem; }
     .game-btn { padding: 6px 12px; font-size: 0.7rem; }
-}
-
-/* Animacje */
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
 }

@@ -8,6 +8,8 @@ if (typeof window.web3Initialized === 'undefined') {
     let tradingEnabled = false;
     let headerComponent = null;
 
+    const MIN_GEM_REQUIRED = 10000;
+
     window.setHeaderComponent = (component) => {
         headerComponent = component;
         updateHeaderUI();
@@ -45,6 +47,10 @@ if (typeof window.web3Initialized === 'undefined') {
         }
         window.userAddress = userAddress;
         window.gemBalance = userGemBalance;
+        
+        if (window.onBalanceUpdateForGames) {
+            window.onBalanceUpdateForGames(userGemBalance);
+        }
     }
 
     function disconnectWallet() {
@@ -55,9 +61,9 @@ if (typeof window.web3Initialized === 'undefined') {
         updateHeaderUI();
         
         window.spendGem = async (amount, purpose = 'game') => {
-            return true;
+            return false;
         };
-        window.gemBalance = 100;
+        window.gemBalance = 0;
         
         if (window.refreshGameAfterWallet) window.refreshGameAfterWallet();
         attachWalletEvents();
@@ -88,8 +94,23 @@ if (typeof window.web3Initialized === 'undefined') {
         }
     }
 
+    async function checkMinimumBalance() {
+        if (!userAddress) {
+            return false;
+        }
+        if (userGemBalance < MIN_GEM_REQUIRED) {
+            return false;
+        }
+        return true;
+    }
+
     async function spendGem(amount, purpose = 'game') {
         if (!userAddress || !tokenContract) {
+            return false;
+        }
+        
+        const hasMinimum = await checkMinimumBalance();
+        if (!hasMinimum) {
             return false;
         }
         
@@ -176,13 +197,16 @@ if (typeof window.web3Initialized === 'undefined') {
     }
 
     window.spendGem = async (amount, purpose) => {
-        return true;
+        return false;
     };
-    window.gemBalance = 100;
+    window.gemBalance = 0;
     window.userAddress = null;
 
     window.connectWallet = connectWallet;
     window.disconnectWallet = disconnectWallet;
+    window.getMinGemRequired = () => MIN_GEM_REQUIRED;
+    window.checkMinimumBalance = checkMinimumBalance;
+    
     window.getGameWalletBalance = async function() {
         if (!tokenContract) return 0;
         try {

@@ -13,6 +13,27 @@ const GAMES = [
     { id: 'tic-tac-toe', name: 'TIC TAC TOE', icon: '❌', description: 'Classic XO game', badge: 'coming', color: '#ffc107' }
 ];
 
+function updateRequirementMessage(balance) {
+    const requirementMsg = document.querySelector('.gem-requirement');
+    if (!requirementMsg) return;
+    
+    const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
+    const tokenAddress = '0xf8a02b86e09319e615534cd8ff034a527261072f';
+    
+    if (!window.userAddress) {
+        requirementMsg.innerHTML = '🔌 Please connect your wallet first to play games!';
+        requirementMsg.style.borderColor = '#ff9800';
+    } else if (balance < minRequired) {
+        requirementMsg.innerHTML = `⚠️ You need <strong>${minRequired.toLocaleString()} GEM FUN</strong> to play games.<br>
+        You have <strong>${balance.toLocaleString()} GEM FUN</strong><br>
+        <span style="font-size: 0.7rem; opacity: 0.7;">Contract: ${tokenAddress.slice(0,6)}...${tokenAddress.slice(-4)}</span>`;
+        requirementMsg.style.borderColor = '#f44336';
+    } else {
+        requirementMsg.innerHTML = `✅ You have enough GEM FUN! <strong>${balance.toLocaleString()} GEM FUN</strong> (min ${minRequired.toLocaleString()})`;
+        requirementMsg.style.borderColor = '#4caf50';
+    }
+}
+
 function renderGamesGrid() {
     const grid = document.getElementById('gamesGrid');
     if (!grid) return;
@@ -27,7 +48,7 @@ function renderGamesGrid() {
     `).join('');
     
     document.querySelectorAll('.game-card').forEach(card => {
-        card.onclick = () => {
+        card.onclick = async () => {
             const gameId = card.dataset.game;
             const game = GAMES.find(g => g.id === gameId);
             if (game) {
@@ -35,8 +56,35 @@ function renderGamesGrid() {
                     return;
                 } else {
                     if (!window.userAddress) {
+                        const requirementMsg = document.querySelector('.gem-requirement');
+                        if (requirementMsg) {
+                            requirementMsg.style.animation = 'pulse 0.5s ease';
+                            setTimeout(() => {
+                                requirementMsg.style.animation = '';
+                            }, 500);
+                        }
                         return;
                     }
+                    
+                    let currentBalance = window.gemBalance;
+                    if (window.refreshBalance) {
+                        currentBalance = await window.refreshBalance();
+                    }
+                    
+                    const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
+                    
+                    if (currentBalance < minRequired) {
+                        updateRequirementMessage(currentBalance);
+                        const requirementMsg = document.querySelector('.gem-requirement');
+                        if (requirementMsg) {
+                            requirementMsg.style.animation = 'pulse 0.5s ease';
+                            setTimeout(() => {
+                                requirementMsg.style.animation = '';
+                            }, 500);
+                        }
+                        return;
+                    }
+                    
                     if (window.openGameModal) {
                         window.openGameModal(gameId, game.name, game);
                     }
@@ -108,14 +156,33 @@ function initApp() {
     renderGamesGrid();
     setupLeaderboardFilters();
     updateLeaderboard('all');
+    
+    setTimeout(() => {
+        const balance = window.gemBalance || 0;
+        updateRequirementMessage(balance);
+    }, 1000);
 }
 
 window.onWalletConnect = (address) => {
     updateLeaderboard('all');
+    if (window.refreshBalance) {
+        window.refreshBalance().then(balance => {
+            updateRequirementMessage(balance);
+        });
+    }
 };
 
 window.onAccountChange = (address) => {
     updateLeaderboard('all');
+    if (window.refreshBalance) {
+        window.refreshBalance().then(balance => {
+            updateRequirementMessage(balance);
+        });
+    }
+};
+
+window.onBalanceUpdateForGames = (balance) => {
+    updateRequirementMessage(balance);
 };
 
 window.updateGlobalRanking = () => updateLeaderboard('all');

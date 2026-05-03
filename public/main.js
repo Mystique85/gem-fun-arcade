@@ -1,10 +1,5 @@
-// ============================================
-// MAIN APP - GAMES LAUNCHER
-// ============================================
-
 let headerComponent = null;
 
-// Games Database
 const GAMES = [
     { id: 'snake', name: 'GEM SNAKE', icon: '🐍', description: 'Classic snake game', badge: 'popular', color: '#4caf50' },
     { id: 'flappy', name: 'GEM FLAPPY', icon: '🕊️', description: 'Flappy Bird style', badge: 'new', color: '#ff9800' },
@@ -18,7 +13,51 @@ const GAMES = [
     { id: 'tic-tac-toe', name: 'TIC TAC TOE', icon: '❌', description: 'Classic XO game', badge: 'coming', color: '#ffc107' }
 ];
 
-// Render games grid
+function updateRequirementMessage(balance) {
+    const requirementMsg = document.querySelector('.gem-requirement');
+    if (!requirementMsg) return;
+    
+    const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
+    const tokenAddress = '0xf8a02b86e09319e615534cd8ff034a527261072f';
+    
+    if (!window.userAddress) {
+        requirementMsg.style.display = 'block';
+        requirementMsg.innerHTML = '🔌 Please connect your wallet first to play games!';
+        requirementMsg.style.borderColor = '#ff9800';
+    } else if (balance < minRequired) {
+        requirementMsg.style.display = 'block';
+        requirementMsg.innerHTML = `
+            ⚠️ You need <strong>${minRequired.toLocaleString()} GEM FUN</strong> to play games.<br>
+            You have <strong>${balance.toLocaleString()} GEM FUN</strong><br>
+            <span style="font-size: 0.75rem; opacity: 0.8;">Contract: </span>
+            <span class="contract-address" onclick="copyContractAddress(this)" style="font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.3); padding: 4px 12px; border-radius: 20px; cursor: pointer; display: inline-block; margin-top: 6px;">
+                📋 ${tokenAddress}
+            </span>
+        `;
+        requirementMsg.style.borderColor = '#f44336';
+    } else {
+        requirementMsg.style.display = 'none';
+    }
+}
+
+window.copyContractAddress = function(element) {
+    const address = element.innerText.replace('📋 ', '');
+    navigator.clipboard.writeText(address).then(() => {
+        const originalText = element.innerHTML;
+        element.innerHTML = '✅ Copied!';
+        element.style.backgroundColor = 'rgba(76, 175, 80, 0.3)';
+        setTimeout(() => {
+            element.innerHTML = originalText;
+            element.style.backgroundColor = 'rgba(0,0,0,0.3)';
+        }, 2000);
+    }).catch(() => {
+        element.innerHTML = '❌ Failed';
+        setTimeout(() => {
+            element.innerHTML = originalText;
+        }, 2000);
+    });
+};
+
 function renderGamesGrid() {
     const grid = document.getElementById('gamesGrid');
     if (!grid) return;
@@ -33,17 +72,43 @@ function renderGamesGrid() {
     `).join('');
     
     document.querySelectorAll('.game-card').forEach(card => {
-        card.onclick = () => {
+        card.onclick = async () => {
             const gameId = card.dataset.game;
             const game = GAMES.find(g => g.id === gameId);
             if (game) {
                 if (game.badge === 'coming') {
-                    alert(`🎮 ${game.name} is coming soon! Stay tuned.`);
+                    return;
                 } else {
                     if (!window.userAddress) {
-                        alert('🔌 Please connect your wallet first to play!');
+                        const requirementMsg = document.querySelector('.gem-requirement');
+                        if (requirementMsg) {
+                            requirementMsg.style.animation = 'pulse 0.5s ease';
+                            setTimeout(() => {
+                                requirementMsg.style.animation = '';
+                            }, 500);
+                        }
                         return;
                     }
+                    
+                    let currentBalance = window.gemBalance;
+                    if (window.refreshBalance) {
+                        currentBalance = await window.refreshBalance();
+                    }
+                    
+                    const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
+                    
+                    if (currentBalance < minRequired) {
+                        updateRequirementMessage(currentBalance);
+                        const requirementMsg = document.querySelector('.gem-requirement');
+                        if (requirementMsg) {
+                            requirementMsg.style.animation = 'pulse 0.5s ease';
+                            setTimeout(() => {
+                                requirementMsg.style.animation = '';
+                            }, 500);
+                        }
+                        return;
+                    }
+                    
                     if (window.openGameModal) {
                         window.openGameModal(gameId, game.name, game);
                     }
@@ -51,10 +116,8 @@ function renderGamesGrid() {
             }
         };
     });
-    console.log('✅ Games grid rendered');
 }
 
-// Update leaderboard
 function updateLeaderboard(filter = 'all') {
     const leaderboardList = document.getElementById('leaderboardList');
     if (!leaderboardList) return;
@@ -87,10 +150,8 @@ function updateLeaderboard(filter = 'all') {
             <div class="leaderboard-score">${entry.score} pts</div>
         </div>
     `).join('');
-    console.log('✅ Leaderboard updated');
 }
 
-// Setup leaderboard filters
 function setupLeaderboardFilters() {
     const filters = document.querySelectorAll('.filter-btn');
     filters.forEach(btn => {
@@ -100,54 +161,58 @@ function setupLeaderboardFilters() {
             updateLeaderboard(btn.dataset.game);
         };
     });
-    console.log('✅ Leaderboard filters setup');
 }
 
-// Inicjalizacja headera
 function initHeader() {
     const headerContainer = document.getElementById('mainHeader');
     if (headerContainer && window.HeaderComponent) {
         headerComponent = new window.HeaderComponent();
         headerContainer.innerHTML = headerComponent.getHTML();
-        console.log('✅ Header HTML injected');
         
-        // Przekaż referencję do web3-core
         if (window.setHeaderComponent) {
             window.setHeaderComponent(headerComponent);
         }
-    } else {
-        console.error('❌ Cannot initialize header - container or component missing');
     }
 }
 
-// Główna inicjalizacja
 function initApp() {
-    console.log('🚀 GEM FUN Arcade initializing...');
     initHeader();
     renderGamesGrid();
     setupLeaderboardFilters();
     updateLeaderboard('all');
-    console.log('✅ App initialized');
+    
+    setTimeout(() => {
+        const balance = window.gemBalance || 0;
+        updateRequirementMessage(balance);
+    }, 1000);
 }
 
-// Wallet event handlers (będą wywoływane przez web3-core)
 window.onWalletConnect = (address) => {
-    console.log('Wallet connected:', address);
     updateLeaderboard('all');
+    if (window.refreshBalance) {
+        window.refreshBalance().then(balance => {
+            updateRequirementMessage(balance);
+        });
+    }
 };
 
 window.onAccountChange = (address) => {
-    console.log('Account changed:', address);
     updateLeaderboard('all');
+    if (window.refreshBalance) {
+        window.refreshBalance().then(balance => {
+            updateRequirementMessage(balance);
+        });
+    }
+};
+
+window.onBalanceUpdateForGames = (balance) => {
+    updateRequirementMessage(balance);
 };
 
 window.updateGlobalRanking = () => updateLeaderboard('all');
 
-// Uruchom po załadowaniu DOM
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
 } else {
     initApp();
 }
-
-console.log('✅ Main.js loaded');
