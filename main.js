@@ -2,6 +2,8 @@
 // MAIN APP - GAMES LAUNCHER
 // ============================================
 
+let headerComponent = null;
+
 // Games Database
 const GAMES = [
     { id: 'snake', name: 'GEM SNAKE', icon: '🐍', description: 'Classic snake game', badge: 'popular', color: '#4caf50' },
@@ -49,6 +51,7 @@ function renderGamesGrid() {
             }
         };
     });
+    console.log('✅ Games grid rendered');
 }
 
 // Update leaderboard
@@ -84,6 +87,7 @@ function updateLeaderboard(filter = 'all') {
             <div class="leaderboard-score">${entry.score} pts</div>
         </div>
     `).join('');
+    console.log('✅ Leaderboard updated');
 }
 
 // Setup leaderboard filters
@@ -96,9 +100,37 @@ function setupLeaderboardFilters() {
             updateLeaderboard(btn.dataset.game);
         };
     });
+    console.log('✅ Leaderboard filters setup');
 }
 
-// Wallet event handlers
+// Inicjalizacja headera
+function initHeader() {
+    const headerContainer = document.getElementById('mainHeader');
+    if (headerContainer && window.HeaderComponent) {
+        headerComponent = new window.HeaderComponent();
+        headerContainer.innerHTML = headerComponent.getHTML();
+        console.log('✅ Header HTML injected');
+        
+        // Przekaż referencję do web3-core
+        if (window.setHeaderComponent) {
+            window.setHeaderComponent(headerComponent);
+        }
+    } else {
+        console.error('❌ Cannot initialize header - container or component missing');
+    }
+}
+
+// Główna inicjalizacja
+function initApp() {
+    console.log('🚀 GEM FUN Arcade initializing...');
+    initHeader();
+    renderGamesGrid();
+    setupLeaderboardFilters();
+    updateLeaderboard('all');
+    console.log('✅ App initialized');
+}
+
+// Wallet event handlers (będą wywoływane przez web3-core)
 window.onWalletConnect = (address) => {
     console.log('Wallet connected:', address);
     updateLeaderboard('all');
@@ -111,11 +143,11 @@ window.onAccountChange = (address) => {
 
 window.updateGlobalRanking = () => updateLeaderboard('all');
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 GEM FUN Arcade initializing...');
-    renderGamesGrid();
-    setupLeaderboardFilters();
-    updateLeaderboard('all');
-    console.log('✅ Ready!');
-});
+// Uruchom po załadowaniu DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
+
+console.log('✅ Main.js loaded');

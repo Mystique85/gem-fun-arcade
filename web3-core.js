@@ -12,6 +12,43 @@ if (typeof window.web3Initialized === 'undefined') {
     let tradingEnabled = false;
     let headerComponent = null;
 
+    // Funkcja do ustawienia referencji headera z main.js
+    window.setHeaderComponent = (component) => {
+        headerComponent = component;
+        updateHeaderUI();
+        
+        // Podłącz eventy do przycisków po ustawieniu headera
+        setTimeout(() => {
+            attachWalletEvents();
+        }, 100);
+    };
+
+    function attachWalletEvents() {
+        const connectBtn = document.getElementById('connectWalletBtn');
+        const disconnectBtn = document.getElementById('disconnectWalletBtn');
+        
+        if (connectBtn) {
+            // Usuń stare eventy
+            const newConnectBtn = connectBtn.cloneNode(true);
+            connectBtn.parentNode.replaceChild(newConnectBtn, connectBtn);
+            newConnectBtn.onclick = (e) => {
+                e.preventDefault();
+                connectWallet();
+            };
+            console.log('✅ Connect button event attached');
+        }
+        
+        if (disconnectBtn) {
+            const newDisconnectBtn = disconnectBtn.cloneNode(true);
+            disconnectBtn.parentNode.replaceChild(newDisconnectBtn, disconnectBtn);
+            newDisconnectBtn.onclick = (e) => {
+                e.preventDefault();
+                disconnectWallet();
+            };
+            console.log('✅ Disconnect button event attached');
+        }
+    }
+
     function updateHeaderUI() {
         if (headerComponent) {
             headerComponent.updateWalletUI(userAddress, userGemBalance, tradingEnabled);
@@ -36,6 +73,9 @@ if (typeof window.web3Initialized === 'undefined') {
         
         console.log('🔌 Wallet disconnected');
         if (window.refreshGameAfterWallet) window.refreshGameAfterWallet();
+        
+        // Odśwież przyciski
+        attachWalletEvents();
     }
 
     async function refreshBalance() {
@@ -156,6 +196,9 @@ if (typeof window.web3Initialized === 'undefined') {
                 console.log('✅ Connected to wallet:', userAddress);
                 if (window.onWalletConnect) window.onWalletConnect(userAddress);
                 
+                // Odśwież przyciski po połączeniu
+                attachWalletEvents();
+                
             } catch (err) {
                 console.error('Connection error:', err);
                 if (err.code === 4001) {
@@ -167,37 +210,19 @@ if (typeof window.web3Initialized === 'undefined') {
                 updateHeaderUI();
             }
         } else {
-            alert('⚠️ No wallet detected! Install MetaMask or Rabby');
+            alert('⚠️ No wallet detected! Install MetaMask (https://metamask.io/) or Rabby (https://rabby.io/)');
             window.open('https://metamask.io/', '_blank');
         }
     }
 
-    // Initialize header and demo mode
-    window.addEventListener('DOMContentLoaded', async () => {
-        // Initialize header component
-        const headerElement = document.getElementById('mainHeader');
-        if (headerElement && window.HeaderComponent) {
-            headerComponent = new window.HeaderComponent();
-            headerElement.innerHTML = headerComponent.getHTML();
-            
-            // Attach wallet listeners
-            const connectBtn = document.getElementById('connectWalletBtn');
-            const disconnectBtn = document.getElementById('disconnectWalletBtn');
-            if (connectBtn) connectBtn.onclick = connectWallet;
-            if (disconnectBtn) disconnectBtn.onclick = disconnectWallet;
-        }
-        
-        window.spendGem = async (amount, purpose) => {
-            console.log(`🎮 Demo mode: spent ${amount} GEM for ${purpose}`);
-            alert(`🎮 Demo mode: spent ${amount} GEM (click "Connect Wallet" to use real tokens)`);
-            return true;
-        };
-        window.gemBalance = 100;
-        window.userAddress = null;
-        
-        updateHeaderUI();
-        console.log('✅ Web3 integration loaded');
-    });
+    // Demo mode po załadowaniu
+    window.spendGem = async (amount, purpose) => {
+        console.log(`🎮 Demo mode: spent ${amount} GEM for ${purpose}`);
+        alert(`🎮 Demo mode: spent ${amount} GEM (click "Connect Wallet" to use real tokens)`);
+        return true;
+    };
+    window.gemBalance = 100;
+    window.userAddress = null;
 
     // Expose functions globally
     window.connectWallet = connectWallet;
