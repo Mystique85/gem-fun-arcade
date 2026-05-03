@@ -1,0 +1,17 @@
+{
+  "name": "gem-fun-arcade",
+  "version": "1.0.0",
+  "description": "GEM FUN Arcade - Play classic games with GEM tokens on Base Chain",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["web3", "games", "snake", "flappy", "base-chain", "crypto-games"],
+  "author": "GEM FUN",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

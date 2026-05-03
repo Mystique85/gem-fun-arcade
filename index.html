@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>🎮 GEM FUN Arcade – Play Games with GEM Token</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- HEADER - wstawiany dynamicznie przez JS -->
+        <header class="header" id="mainHeader"></header>
+
+        <!-- ZAWARTOŚĆ SCROLLOWANA -->
+        <div class="content-scroll">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h2 class="hero-title">🎮 Welcome to GEM FUN Arcade</h2>
+                <p class="hero-subtitle">Play classic arcade games with your GEM tokens. Connect wallet to start!</p>
+            </section>
+
+            <!-- Games Grid -->
+            <section class="games-section">
+                <h3 class="section-title">✨ Classic Arcade Games</h3>
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Games will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Leaderboard Section -->
+            <section class="leaderboard-section">
+                <h3 class="section-title">🏆 Global Leaderboard</h3>
+                <div class="leaderboard-container">
+                    <div class="leaderboard-filters">
+                        <button class="filter-btn active" data-game="all">All Games</button>
+                        <button class="filter-btn" data-game="snake">🐍 Snake</button>
+                        <button class="filter-btn" data-game="flappy">🕊️ Flappy</button>
+                        <button class="filter-btn" data-game="tetris">🧩 Tetris</button>
+                        <button class="filter-btn" data-game="pong">🏓 Pong</button>
+                    </div>
+                    <div class="leaderboard-list" id="leaderboardList">
+                        <div class="loading-scores">Loading scores...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="token-info">
+                        <span class="token-badge">💎 GEM FUN Token</span>
+                        <span class="token-address">0xf8a02B...072f</span>
+                    </div>
+                    <div class="warning-note">
+                        ⚠️ GEM token must be migrated (trading unlocked) for purchases
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- GAME MODAL -->
+    <div id="gameModal" class="game-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modalGameTitle">Game Title</h3>
+                <button class="modal-close" id="closeModalBtn">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Game will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="/config.js"></script>
+    <script src="/components/header.js"></script>
+    <script src="/components/game-modal.js"></script>
+    <script src="/web3-core.js"></script>
+    <script src="/games/snake.js"></script>
+    <script src="/games/flappy.js"></script>
+    <script src="/main.js"></script>
+</body>
+</html>
