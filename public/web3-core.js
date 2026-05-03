@@ -196,6 +196,47 @@ if (typeof window.web3Initialized === 'undefined') {
         }
     }
 
+    // Automatyczne przywracanie połączenia po odświeżeniu strony
+    async function restoreConnection() {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts && accounts.length > 0) {
+                    console.log('🟡 Restoring previous wallet connection...');
+                    userAddress = accounts[0];
+                    web3 = new Web3(window.ethereum);
+                    
+                    const chainId = await web3.eth.getChainId();
+                    if (chainId !== 8453) {
+                        try {
+                            await window.ethereum.request({
+                                method: 'wallet_switchEthereumChain',
+                                params: [{ chainId: '0x2105' }]
+                            });
+                        } catch (e) {}
+                    }
+                    
+                    tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
+                    
+                    await checkTradingStatus();
+                    await refreshBalance();
+                    
+                    updateHeaderUI();
+                    
+                    window.spendGem = spendGem;
+                    window.refreshBalance = refreshBalance;
+                    
+                    if (window.onWalletConnect) window.onWalletConnect(userAddress);
+                    attachWalletEvents();
+                    
+                    console.log('✅ Previous connection restored');
+                }
+            } catch (err) {
+                console.log('No previous connection to restore');
+            }
+        }
+    }
+
     window.spendGem = async (amount, purpose) => {
         return false;
     };
@@ -216,4 +257,9 @@ if (typeof window.web3Initialized === 'undefined') {
             return 0;
         }
     };
+
+    // Wywołaj przywracanie połączenia po załadowaniu strony
+    setTimeout(() => {
+        restoreConnection();
+    }, 500);
 }
