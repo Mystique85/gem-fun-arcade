@@ -99,14 +99,18 @@ function setupSnakeGame() {
         };
     });
     
+    // Obsługa klawiszy - strzałki + WASD
     const keyHandler = (e) => {
         const key = e.key;
-        if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight') {
+        // Blokuj scrollowanie dla wszystkich klawiszy nawigacji
+        if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || 
+            key === 'w' || key === 'W' || key === 's' || key === 'S' || key === 'a' || key === 'A' || key === 'd' || key === 'D') {
             e.preventDefault();
         }
         
         if (!snakeGameActive) return;
         
+        // Strzałki
         if (key === 'ArrowRight' && snakeDirection !== 'LEFT') {
             snakeNextDirection = 'RIGHT';
         } else if (key === 'ArrowLeft' && snakeDirection !== 'RIGHT') {
@@ -114,6 +118,16 @@ function setupSnakeGame() {
         } else if (key === 'ArrowUp' && snakeDirection !== 'DOWN') {
             snakeNextDirection = 'UP';
         } else if (key === 'ArrowDown' && snakeDirection !== 'UP') {
+            snakeNextDirection = 'DOWN';
+        }
+        // Klawisze WASD
+        else if ((key === 'd' || key === 'D') && snakeDirection !== 'LEFT') {
+            snakeNextDirection = 'RIGHT';
+        } else if ((key === 'a' || key === 'A') && snakeDirection !== 'RIGHT') {
+            snakeNextDirection = 'LEFT';
+        } else if ((key === 'w' || key === 'W') && snakeDirection !== 'DOWN') {
+            snakeNextDirection = 'UP';
+        } else if ((key === 's' || key === 'S') && snakeDirection !== 'UP') {
             snakeNextDirection = 'DOWN';
         }
     };
@@ -125,7 +139,8 @@ function setupSnakeGame() {
     document.addEventListener('keydown', window.snakeKeyHandler);
     
     const preventScroll = (e) => {
-        if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === ' ') {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' || 
+            e.key === 'w' || e.key === 'W' || e.key === 's' || e.key === 'S' || e.key === 'a' || e.key === 'A' || e.key === 'd' || e.key === 'D' || e.key === ' ') {
             e.preventDefault();
         }
     };
