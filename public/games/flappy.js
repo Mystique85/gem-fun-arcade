@@ -1,9 +1,3 @@
-// ============================================
-// FLAPPY BIRD GAME - Z INTEGRACJĄ GEM TOKEN
-// ============================================
-
-console.log('🕊️ Flappy game script loading...');
-
 let flappyCanvas, flappyCtx;
 let flappyGameLoop;
 let flappyActive = false;
@@ -19,31 +13,16 @@ const FLAPPY_HEIGHT = 400;
 const PIPE_WIDTH = 60;
 const PIPE_GAP = 120;
 
-// Główna funkcja inicjalizująca grę (dla strony głównej)
 function initFlappyGame(container) {
-    console.log('🕊️ INIT FLAPPY GAME - container:', container);
-    
-    if (!container) {
-        console.error('No container provided for Flappy game');
-        return;
-    }
-    
+    if (!container) return;
     createFlappyGameHTML(container);
     setupFlappyGame();
-    console.log('✅ Flappy game initialized');
 }
 
-// Funkcja dla modala
 function initFlappyGameInModal(container) {
-    console.log('🕊️ INIT FLAPPY GAME IN MODAL');
-    if (!container) {
-        console.error('No container provided for Flappy game modal');
-        return;
-    }
-    
+    if (!container) return;
     createFlappyGameHTML(container);
     setupFlappyGame();
-    console.log('✅ Flappy game initialized in modal');
 }
 
 function createFlappyGameHTML(container) {
@@ -75,16 +54,12 @@ function createFlappyGameHTML(container) {
 
 function setupFlappyGame() {
     flappyCanvas = document.getElementById('flappyCanvas');
-    if (!flappyCanvas) {
-        console.error('Flappy canvas not found!');
-        return;
-    }
+    if (!flappyCanvas) return;
     flappyCtx = flappyCanvas.getContext('2d');
     
     flappyResetGame();
     flappyDraw();
     
-    // Event listeners
     const startBtn = document.getElementById('flappyStartBtn');
     const continueBtn = document.getElementById('flappyContinueBtn');
     
@@ -96,7 +71,6 @@ function setupFlappyGame() {
         continueBtn.onclick = () => flappyContinueGame();
     }
     
-    // Powerup buttons
     document.querySelectorAll('.powerup-btn').forEach(btn => {
         btn.onclick = async (e) => {
             e.preventDefault();
@@ -105,7 +79,6 @@ function setupFlappyGame() {
         };
     });
     
-    // Touch/click for jump
     const jumpHandler = (e) => {
         e.preventDefault();
         if (flappyActive && flappyGameStarted) {
@@ -129,7 +102,6 @@ function setupFlappyGame() {
     flappyCanvas.addEventListener('click', window.flappyJumpHandler);
     flappyCanvas.addEventListener('touchstart', window.flappyJumpHandler);
     
-    // Keyboard with preventDefault
     const spaceHandler = (e) => {
         if (e.code === 'Space') {
             e.preventDefault();
@@ -163,14 +135,12 @@ function flappyUpdateScore() {
 function flappyDraw() {
     if (!flappyCtx) return;
     
-    // Sky gradient
     const gradient = flappyCtx.createLinearGradient(0, 0, 0, FLAPPY_HEIGHT);
     gradient.addColorStop(0, '#1a3a5c');
     gradient.addColorStop(1, '#2a5a8c');
     flappyCtx.fillStyle = gradient;
     flappyCtx.fillRect(0, 0, FLAPPY_WIDTH, FLAPPY_HEIGHT);
     
-    // Clouds
     flappyCtx.fillStyle = 'rgba(255,255,255,0.3)';
     flappyCtx.beginPath();
     flappyCtx.ellipse(80, 60, 40, 30, 0, 0, Math.PI * 2);
@@ -178,28 +148,23 @@ function flappyDraw() {
     flappyCtx.ellipse(500, 80, 45, 32, 0, 0, Math.PI * 2);
     flappyCtx.fill();
     
-    // Ground
     flappyCtx.fillStyle = '#8B5E3C';
     flappyCtx.fillRect(0, FLAPPY_HEIGHT - 40, FLAPPY_WIDTH, 40);
     flappyCtx.fillStyle = '#6B3E1C';
     flappyCtx.fillRect(0, FLAPPY_HEIGHT - 40, FLAPPY_WIDTH, 5);
     
-    // Pipes
     flappyPipes.forEach(pipe => {
-        // Top pipe
         flappyCtx.fillStyle = '#2d6a2f';
         flappyCtx.fillRect(pipe.x, 0, PIPE_WIDTH, pipe.topHeight);
         flappyCtx.fillStyle = '#1a4a1a';
         flappyCtx.fillRect(pipe.x - 5, pipe.topHeight - 30, PIPE_WIDTH + 10, 30);
         
-        // Bottom pipe
         flappyCtx.fillStyle = '#2d6a2f';
         flappyCtx.fillRect(pipe.x, pipe.topHeight + PIPE_GAP, PIPE_WIDTH, FLAPPY_HEIGHT - pipe.topHeight - PIPE_GAP);
         flappyCtx.fillStyle = '#1a4a1a';
         flappyCtx.fillRect(pipe.x - 5, pipe.topHeight + PIPE_GAP, PIPE_WIDTH + 10, 30);
     });
     
-    // Bird
     const angle = Math.min(Math.max(flappyBird.velocity * 3, -0.8), 0.8);
     flappyCtx.save();
     flappyCtx.translate(flappyBird.x, flappyBird.y);
@@ -224,7 +189,6 @@ function flappyDraw() {
     flappyCtx.fill();
     flappyCtx.restore();
     
-    // Score text
     if (!flappyGameStarted && !flappyActive) {
         flappyCtx.fillStyle = 'white';
         flappyCtx.font = 'bold 20px Inter';
@@ -238,17 +202,14 @@ function flappyDraw() {
 function flappyUpdate() {
     if (!flappyActive) return;
     
-    // Bird physics
     flappyBird.velocity += flappyBird.gravity;
     flappyBird.y += flappyBird.velocity;
     
-    // Collision with ground/ceiling
     if (flappyBird.y + 15 >= FLAPPY_HEIGHT - 40 || flappyBird.y - 15 <= 0) {
         flappyGameOver();
         return;
     }
     
-    // Generate pipes
     flappyFrame++;
     if (flappyFrame > 90) {
         flappyFrame = 0;
@@ -260,11 +221,9 @@ function flappyUpdate() {
         });
     }
     
-    // Move pipes and check collision
     for (let i = 0; i < flappyPipes.length; i++) {
         flappyPipes[i].x -= 2.5;
         
-        // Collision
         if (flappyBird.x + 12 > flappyPipes[i].x && flappyBird.x - 12 < flappyPipes[i].x + PIPE_WIDTH) {
             if (flappyBird.y - 12 < flappyPipes[i].topHeight || flappyBird.y + 12 > flappyPipes[i].topHeight + PIPE_GAP) {
                 flappyGameOver();
@@ -272,7 +231,6 @@ function flappyUpdate() {
             }
         }
         
-        // Score
         if (!flappyPipes[i].passed && flappyPipes[i].x + PIPE_WIDTH < flappyBird.x) {
             flappyPipes[i].passed = true;
             flappyScore++;
@@ -285,7 +243,6 @@ function flappyUpdate() {
             }
         }
         
-        // Remove offscreen pipes
         if (flappyPipes[i].x + PIPE_WIDTH < 0) {
             flappyPipes.splice(i, 1);
             i--;
@@ -301,7 +258,6 @@ async function flappyGameOver() {
     if (flappyGameLoop) clearInterval(flappyGameLoop);
     const continueBtn = document.getElementById('flappyContinueBtn');
     if (continueBtn) continueBtn.style.display = 'inline-block';
-    alert(`💀 Game Over! Score: ${flappyScore}`);
     await flappySaveScore();
     flappyDraw();
 }
@@ -318,11 +274,7 @@ async function flappySaveScore() {
 }
 
 function flappyStartGame() {
-    console.log('Flappy start game called');
-    if (!window.userAddress) {
-        alert('🔌 Connect wallet first to play!');
-        return;
-    }
+    if (!window.userAddress) return;
     flappyResetGame();
     flappyActive = true;
     flappyGameStarted = true;
@@ -331,14 +283,10 @@ function flappyStartGame() {
     if (flappyGameLoop) clearInterval(flappyGameLoop);
     flappyGameLoop = setInterval(() => flappyUpdate(), 1000 / 60);
     flappyDraw();
-    console.log('Flappy game started');
 }
 
 async function flappyContinueGame() {
-    if (!window.userAddress) {
-        alert('🔌 Connect wallet first!');
-        return;
-    }
+    if (!window.userAddress) return;
     if (window.spendGem) {
         const success = await window.spendGem(5, 'continue flappy game');
         if (success) {
@@ -352,25 +300,14 @@ async function flappyContinueGame() {
             flappyDraw();
             if (window.refreshBalance) await window.refreshBalance();
         }
-    } else {
-        alert('🔌 Wallet not ready. Please reconnect.');
     }
 }
 
 async function flappyBuyPowerup(cost, type) {
-    if (!window.userAddress) {
-        alert('🔌 Connect wallet first');
-        return false;
-    }
+    if (!window.userAddress) return false;
     if (window.spendGem) {
         const success = await window.spendGem(cost, `powerup: ${type}`);
         if (success) {
-            if (type === 'shield') {
-                alert('🛡️ Shield active - you get one extra life on next death!');
-            }
-            if (type === 'slowmo') {
-                alert('⏱️ SlowMo active - game speed reduced!');
-            }
             if (window.refreshBalance) await window.refreshBalance();
             return true;
         }
@@ -378,8 +315,5 @@ async function flappyBuyPowerup(cost, type) {
     return false;
 }
 
-// Export functions for global use
 window.initFlappyGame = initFlappyGame;
 window.initFlappyGameInModal = initFlappyGameInModal;
-
-console.log('✅ Flappy game script loaded');

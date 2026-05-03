@@ -1,9 +1,3 @@
-// ============================================
-// SNAKE GAME - Z INTEGRACJĄ GEM TOKEN
-// ============================================
-
-console.log('🐍 Snake game script loading...');
-
 let snakeCanvas, snakeCtx;
 let snakeGameLoop;
 let snakeData, snakeDirection, snakeNextDirection;
@@ -17,31 +11,16 @@ const SNAKE_COLS = 30;
 const SNAKE_ROWS = 20;
 const SNAKE_CELL_SIZE = 20;
 
-// Główna funkcja inicjalizująca grę (dla strony głównej)
 function initSnakeGame(container) {
-    console.log('🐍 INIT SNAKE GAME - container:', container);
-    
-    if (!container) {
-        console.error('No container provided for Snake game');
-        return;
-    }
-    
+    if (!container) return;
     createSnakeGameHTML(container);
     setupSnakeGame();
-    console.log('✅ Snake game initialized');
 }
 
-// Funkcja dla modala
 function initSnakeGameInModal(container) {
-    console.log('🐍 INIT SNAKE GAME IN MODAL');
-    if (!container) {
-        console.error('No container provided for Snake game modal');
-        return;
-    }
-    
+    if (!container) return;
     createSnakeGameHTML(container);
     setupSnakeGame();
-    console.log('✅ Snake game initialized in modal');
 }
 
 function createSnakeGameHTML(container) {
@@ -72,13 +51,9 @@ function createSnakeGameHTML(container) {
 
 function setupSnakeGame() {
     snakeCanvas = document.getElementById('snakeCanvas');
-    if (!snakeCanvas) {
-        console.error('Snake canvas not found!');
-        return;
-    }
+    if (!snakeCanvas) return;
     snakeCtx = snakeCanvas.getContext('2d');
     
-    // Add roundRect if needed
     if (!CanvasRenderingContext2D.prototype.roundRect) {
         CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
             if (w < 2 * r) r = w / 2;
@@ -99,7 +74,6 @@ function setupSnakeGame() {
     snakeInitGame();
     snakeDraw();
     
-    // Event listeners
     const startBtn = document.getElementById('snakeStartBtn');
     const continueBtn = document.getElementById('snakeContinueBtn');
     
@@ -117,7 +91,6 @@ function setupSnakeGame() {
         };
     }
     
-    // Powerup buttons
     document.querySelectorAll('.powerup-btn').forEach(btn => {
         btn.onclick = async (e) => {
             e.preventDefault();
@@ -126,7 +99,6 @@ function setupSnakeGame() {
         };
     });
     
-    // Keyboard controls with preventDefault to stop scrolling
     const keyHandler = (e) => {
         const key = e.key;
         if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight') {
@@ -205,7 +177,6 @@ function snakeDraw() {
     snakeCtx.fillStyle = '#0a1a0f';
     snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
     
-    // Grid
     snakeCtx.strokeStyle = 'rgba(255,215,0,0.15)';
     snakeCtx.lineWidth = 0.5;
     for (let i = 0; i <= SNAKE_COLS; i++) {
@@ -219,7 +190,6 @@ function snakeDraw() {
         snakeCtx.stroke();
     }
     
-    // Snake
     snakeData.forEach((segment, index) => {
         const x = segment.x * SNAKE_CELL_SIZE;
         const y = segment.y * SNAKE_CELL_SIZE;
@@ -238,7 +208,6 @@ function snakeDraw() {
         snakeCtx.roundRect(x + 1, y + 1, SNAKE_CELL_SIZE - 2, SNAKE_CELL_SIZE - 2, 4);
         snakeCtx.fill();
         
-        // Eyes for head
         if (index === 0) {
             snakeCtx.fillStyle = '#ffffff';
             snakeCtx.beginPath();
@@ -266,7 +235,6 @@ function snakeDraw() {
         }
     });
     
-    // Food
     const fx = snakeFood.x * SNAKE_CELL_SIZE;
     const fy = snakeFood.y * SNAKE_CELL_SIZE;
     snakeCtx.shadowBlur = 8;
@@ -285,7 +253,6 @@ function snakeDraw() {
     snakeCtx.fill();
     snakeCtx.shadowBlur = 0;
     
-    // Effects
     if (snakePowerups.x2) {
         snakeCtx.fillStyle = 'rgba(255,215,0,0.06)';
         snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
@@ -320,7 +287,6 @@ function snakeMove() {
         snakeData.pop();
     }
     
-    // Collision
     if (newHead.x < 0 || newHead.x >= SNAKE_COLS || newHead.y < 0 || newHead.y >= SNAKE_ROWS) {
         snakeHandleDeath();
         return false;
@@ -353,7 +319,6 @@ async function snakeHandleDeath() {
         if (snakeGameLoop) clearInterval(snakeGameLoop);
         const continueBtn = document.getElementById('snakeContinueBtn');
         if (continueBtn) continueBtn.style.display = 'inline-block';
-        alert(`💀 Game Over! Score: ${snakeScore}`);
         await snakeSaveScore();
     }
 }
@@ -370,11 +335,7 @@ async function snakeSaveScore() {
 }
 
 function snakeStartGame() {
-    console.log('Snake start game called');
-    if (!window.userAddress) {
-        alert('🔌 Connect wallet first to play!');
-        return;
-    }
+    if (!window.userAddress) return;
     snakeInitGame();
     snakeGameActive = true;
     const continueBtn = document.getElementById('snakeContinueBtn');
@@ -388,14 +349,10 @@ function snakeStartGame() {
         }
     }, interval);
     snakeDraw();
-    console.log('Snake game started');
 }
 
 async function snakeContinueGame() {
-    if (!window.userAddress) {
-        alert('🔌 Connect wallet first!');
-        return;
-    }
+    if (!window.userAddress) return;
     if (window.spendGem) {
         const success = await window.spendGem(5, 'continue snake game');
         if (success) {
@@ -414,16 +371,11 @@ async function snakeContinueGame() {
             snakeDraw();
             if (window.refreshBalance) await window.refreshBalance();
         }
-    } else {
-        alert('🔌 Wallet not ready. Please reconnect.');
     }
 }
 
 async function snakeBuyPowerup(cost, type) {
-    if (!window.userAddress) {
-        alert('🔌 Connect wallet first');
-        return false;
-    }
+    if (!window.userAddress) return false;
     if (window.spendGem) {
         const success = await window.spendGem(cost, `powerup: ${type}`);
         if (success) {
@@ -438,8 +390,5 @@ async function snakeBuyPowerup(cost, type) {
     return false;
 }
 
-// Export functions for global use
 window.initSnakeGame = initSnakeGame;
 window.initSnakeGameInModal = initSnakeGameInModal;
-
-console.log('✅ Snake game script loaded');
