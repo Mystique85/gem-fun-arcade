@@ -19,6 +19,7 @@ function updateRequirementMessage(balance) {
     
     const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
     const tokenAddress = '0xf8a02b86e09319e615534cd8ff034a527261072f';
+    const buyLink = 'https://hashcoin.farm/gem';
     
     if (!window.userAddress) {
         requirementMsg.style.display = 'block';
@@ -32,7 +33,10 @@ function updateRequirementMessage(balance) {
             <span style="font-size: 0.75rem; opacity: 0.8;">Contract: </span>
             <span class="contract-address" onclick="copyContractAddress(this)" style="font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.3); padding: 4px 12px; border-radius: 20px; cursor: pointer; display: inline-block; margin-top: 6px;">
                 📋 ${tokenAddress}
-            </span>
+            </span><br>
+            <a href="${buyLink}" target="_blank" rel="noopener noreferrer" style="color: #ffd700; text-decoration: none; display: inline-block; margin-top: 10px; padding: 6px 16px; background: rgba(255,215,0,0.1); border-radius: 30px; font-size: 0.8rem; transition: all 0.2s;">
+                🛒 Buy GEM FUN on HashCoin →
+            </a>
         `;
         requirementMsg.style.borderColor = '#f44336';
     } else {

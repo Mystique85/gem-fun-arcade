@@ -216,11 +216,41 @@ body {
     text-align: center;
     margin-top: 20px;
     font-size: 0.9rem;
+    transition: all 0.3s ease;
 }
 
 .gem-requirement strong {
     color: var(--primary);
     font-weight: 800;
+}
+
+.gem-requirement a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.gem-requirement a:hover {
+    text-decoration: underline;
+    text-shadow: 0 0 5px var(--primary-glow);
+    background: rgba(255,215,0,0.2);
+}
+
+.contract-address {
+    font-family: monospace;
+    font-size: 0.75rem;
+    background: rgba(0,0,0,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 6px;
+    transition: all 0.2s ease;
+}
+
+.contract-address:hover {
+    background: rgba(255,215,0,0.2);
+    transform: scale(1.02);
 }
 
 .games-section {
