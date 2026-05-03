@@ -1,7 +1,3 @@
-// ============================================
-// WEB3 CORE - ZARZĄDZANIE PORTFELEM I TOKENEM
-// ============================================
-
 if (typeof window.web3Initialized === 'undefined') {
     window.web3Initialized = true;
 
@@ -12,12 +8,9 @@ if (typeof window.web3Initialized === 'undefined') {
     let tradingEnabled = false;
     let headerComponent = null;
 
-    // Funkcja do ustawienia referencji headera z main.js
     window.setHeaderComponent = (component) => {
         headerComponent = component;
         updateHeaderUI();
-        
-        // Podłącz eventy do przycisków po ustawieniu headera
         setTimeout(() => {
             attachWalletEvents();
         }, 100);
@@ -28,14 +21,12 @@ if (typeof window.web3Initialized === 'undefined') {
         const disconnectBtn = document.getElementById('disconnectWalletBtn');
         
         if (connectBtn) {
-            // Usuń stare eventy
             const newConnectBtn = connectBtn.cloneNode(true);
             connectBtn.parentNode.replaceChild(newConnectBtn, connectBtn);
             newConnectBtn.onclick = (e) => {
                 e.preventDefault();
                 connectWallet();
             };
-            console.log('✅ Connect button event attached');
         }
         
         if (disconnectBtn) {
@@ -45,7 +36,6 @@ if (typeof window.web3Initialized === 'undefined') {
                 e.preventDefault();
                 disconnectWallet();
             };
-            console.log('✅ Disconnect button event attached');
         }
     }
 
@@ -65,16 +55,11 @@ if (typeof window.web3Initialized === 'undefined') {
         updateHeaderUI();
         
         window.spendGem = async (amount, purpose = 'game') => {
-            console.log(`🎮 Demo mode: would spend ${amount} GEM for ${purpose}`);
-            alert(`🎮 Demo mode: spent ${amount} GEM (connect wallet to use real tokens)`);
             return true;
         };
         window.gemBalance = 100;
         
-        console.log('🔌 Wallet disconnected');
         if (window.refreshGameAfterWallet) window.refreshGameAfterWallet();
-        
-        // Odśwież przyciski
         attachWalletEvents();
     }
 
@@ -88,7 +73,6 @@ if (typeof window.web3Initialized === 'undefined') {
             if (window.onBalanceUpdate) window.onBalanceUpdate(userGemBalance);
             return userGemBalance;
         } catch (err) {
-            console.error('Balance read error:', err);
             return 0;
         }
     }
@@ -100,24 +84,20 @@ if (typeof window.web3Initialized === 'undefined') {
             updateHeaderUI();
             return tradingEnabled;
         } catch (err) {
-            console.error('Trading status error:', err);
             return false;
         }
     }
 
     async function spendGem(amount, purpose = 'game') {
         if (!userAddress || !tokenContract) {
-            alert('🔌 Connect wallet first!');
             return false;
         }
         
         if (!tradingEnabled) {
-            alert('⚠️ GEM token trading is not active yet! Wait for token migration.');
             return false;
         }
         
         if (userGemBalance < amount) {
-            alert(`❌ Insufficient GEM! You have: ${userGemBalance.toFixed(2)}, need: ${amount}`);
             return false;
         }
         
@@ -128,14 +108,10 @@ if (typeof window.web3Initialized === 'undefined') {
                 gas: 100000
             });
             
-            console.log('Transaction successful!', tx.transactionHash);
-            alert(`✅ Spent ${amount} GEM for ${purpose}!`);
             await refreshBalance();
             return true;
             
         } catch (err) {
-            console.error('Transaction error:', err);
-            alert(`❌ Error: ${err.message.substring(0, 100)}`);
             return false;
         }
     }
@@ -143,8 +119,6 @@ if (typeof window.web3Initialized === 'undefined') {
     async function connectWallet() {
         if (typeof window.ethereum !== 'undefined') {
             try {
-                console.log('🟡 Attempting to connect wallet...');
-                
                 const accounts = await window.ethereum.request({ 
                     method: 'eth_requestAccounts'
                 });
@@ -158,15 +132,12 @@ if (typeof window.web3Initialized === 'undefined') {
                 
                 const chainId = await web3.eth.getChainId();
                 if (chainId !== 8453) {
-                    alert('⚠️ Please switch to Base Mainnet!');
                     try {
                         await window.ethereum.request({
                             method: 'wallet_switchEthereumChain',
                             params: [{ chainId: '0x2105' }]
                         });
-                    } catch (e) {
-                        console.log('Network not switched');
-                    }
+                    } catch (e) {}
                 }
                 
                 tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
@@ -185,7 +156,6 @@ if (typeof window.web3Initialized === 'undefined') {
                         await refreshBalance();
                         await checkTradingStatus();
                         updateHeaderUI();
-                        console.log('🔄 Account changed:', userAddress);
                         if (window.onAccountChange) window.onAccountChange(userAddress);
                     } else {
                         disconnectWallet();
@@ -193,38 +163,24 @@ if (typeof window.web3Initialized === 'undefined') {
                     }
                 });
                 
-                console.log('✅ Connected to wallet:', userAddress);
                 if (window.onWalletConnect) window.onWalletConnect(userAddress);
-                
-                // Odśwież przyciski po połączeniu
                 attachWalletEvents();
                 
             } catch (err) {
-                console.error('Connection error:', err);
-                if (err.code === 4001) {
-                    alert('❌ Connection rejected. Click "Connect Wallet" again and approve.');
-                } else {
-                    alert('Failed to connect: ' + (err.message || err));
-                }
                 userAddress = null;
                 updateHeaderUI();
             }
         } else {
-            alert('⚠️ No wallet detected! Install MetaMask (https://metamask.io/) or Rabby (https://rabby.io/)');
             window.open('https://metamask.io/', '_blank');
         }
     }
 
-    // Demo mode po załadowaniu
     window.spendGem = async (amount, purpose) => {
-        console.log(`🎮 Demo mode: spent ${amount} GEM for ${purpose}`);
-        alert(`🎮 Demo mode: spent ${amount} GEM (click "Connect Wallet" to use real tokens)`);
         return true;
     };
     window.gemBalance = 100;
     window.userAddress = null;
 
-    // Expose functions globally
     window.connectWallet = connectWallet;
     window.disconnectWallet = disconnectWallet;
     window.getGameWalletBalance = async function() {
@@ -236,6 +192,4 @@ if (typeof window.web3Initialized === 'undefined') {
             return 0;
         }
     };
-
-    console.log('✅ Web3 core initialized');
 }
