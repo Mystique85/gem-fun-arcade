@@ -25,6 +25,7 @@ function updateRequirementMessage(balance) {
     const whyLogin = document.querySelector('.why-login');
     const howItWorks = document.querySelector('.how-it-works');
     const finalCta = document.querySelector('.final-cta');
+    const tokenEcosystem = document.getElementById('tokenEcosystemSection');
     
     const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
     const tokenAddress = '0xf8a02b86e09319e615534cd8ff034a527261072f';
@@ -40,6 +41,7 @@ function updateRequirementMessage(balance) {
         if (whyLogin) whyLogin.style.display = 'block';
         if (howItWorks) howItWorks.style.display = 'block';
         if (finalCta) finalCta.style.display = 'flex';
+        if (tokenEcosystem) tokenEcosystem.style.display = 'block';
         requirementMsg.style.display = 'block';
         requirementMsg.innerHTML = '🔌 Please connect your wallet first to play games!';
         requirementMsg.style.borderColor = '#ff9800';
@@ -58,6 +60,7 @@ function updateRequirementMessage(balance) {
         if (whyLogin) whyLogin.style.display = 'none';
         if (howItWorks) howItWorks.style.display = 'none';
         if (finalCta) finalCta.style.display = 'none';
+        if (tokenEcosystem) tokenEcosystem.style.display = 'none';
         requirementMsg.style.display = 'block';
         requirementMsg.innerHTML = `
             ⚠️ You need <strong>${minRequired.toLocaleString()} GEM FUN</strong> to play games.<br>
@@ -86,6 +89,7 @@ function updateRequirementMessage(balance) {
         if (whyLogin) whyLogin.style.display = 'none';
         if (howItWorks) howItWorks.style.display = 'none';
         if (finalCta) finalCta.style.display = 'none';
+        if (tokenEcosystem) tokenEcosystem.style.display = 'none';
         requirementMsg.style.display = 'none';
     }
 }

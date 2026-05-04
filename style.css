@@ -1408,3 +1408,276 @@ body {
         text-align: center;
     }
 }
+
+/* HERO */
+.hero-tagline {
+    font-size: 0.7rem;
+    color: #ffaa44;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+.hero-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #fff, #ffd700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-cta {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1a1a1a;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: all 0.2s;
+}
+
+/* TOKEN ACCESS */
+.token-access {
+    text-align: center;
+    margin: 30px 0 20px;
+}
+
+.token-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.token-access h2 {
+    color: #ffd700;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.token-note {
+    color: #ffd700;
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+/* HOW IT WORKS */
+.how-it-works-simple {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.how-it-works-simple h2 {
+    color: #ffd700;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.steps-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.step-item {
+    background: rgba(255,255,255,0.05);
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-size: 0.85rem;
+}
+
+.step-arrow {
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+/* CORE EXPERIENCE */
+.core-experience-simple {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.core-experience-simple h2 {
+    color: #ffd700;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.features-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.feature-item {
+    color: #8b92b0;
+    font-size: 0.9rem;
+}
+
+/* LEADERBOARDS SIMPLE */
+.leaderboards-simple {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.leaderboards-simple h2 {
+    color: #ffd700;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.leaderboards-simple p {
+    color: #8b92b0;
+    margin-bottom: 20px;
+}
+
+.ranking-podium-mini {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.podium-place {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.3);
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-size: 0.85rem;
+}
+
+.podium-place.first {
+    background: rgba(255,215,0,0.1);
+    border: 1px solid rgba(255,215,0,0.3);
+    transform: scale(1.05);
+}
+
+/* REWARDS SIMPLE */
+.rewards-simple {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.rewards-simple h2 {
+    color: #ffd700;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+/* FUTURE VISION */
+.future-vision-simple {
+    text-align: center;
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(255,215,0,0.03);
+    border-radius: 20px;
+}
+
+.future-vision-simple h2 {
+    color: #ffd700;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.vision-quote {
+    margin-top: 16px;
+    font-style: italic;
+    color: #ffd700;
+    font-size: 0.85rem;
+}
+
+/* WHY LOGIN SIMPLE */
+.why-login-simple {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.why-login-simple h2 {
+    color: #ffd700;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.benefits-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.benefit-item {
+    background: rgba(255,255,255,0.05);
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-size: 0.85rem;
+}
+
+/* SUPPORTERS SIMPLE */
+.supporters-simple {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.supporters-simple h2 {
+    color: #ffd700;
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+}
+
+.supporters-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.supporter-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,0,0,0.3);
+    padding: 5px 12px;
+    border-radius: 40px;
+    text-decoration: none;
+    color: #eef2ff;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.supporter-link:hover {
+    border-color: #ffd700;
+    color: #ffd700;
+}
+
+.supporter-link img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    
+    .steps-row {
+        flex-direction: column;
+    }
+    
+    .step-arrow {
+        transform: rotate(90deg);
+    }
+    
+    .features-list, .benefits-row {
+        flex-direction: column;
+        align-items: center;
+    }
+}
