@@ -17,31 +17,85 @@ const SNAKE_COLS = 30;
 const SNAKE_ROWS = 20;
 const SNAKE_CELL_SIZE = 20;
 
-// Główna funkcja inicjalizująca grę (dla strony głównej)
-function initSnakeGame(container) {
-    console.log('🐍 INIT SNAKE GAME - container:', container);
+// ============================================
+// FUNKCJE MODALU UDOSTĘPNIANIA
+// ============================================
+
+function showScoreModal(score) {
+    console.log('🎯 showScoreModal called with score:', score);
+    const existingModal = document.getElementById('snakeScoreModal');
+    if (existingModal) existingModal.remove();
     
-    if (!container) {
-        console.error('No container provided for Snake game');
-        return;
-    }
+    const shareText = `🐍 I scored ${score} points in GEM FUN Snake! Can you beat me? 🎮 Play at: ${window.location.origin}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
     
-    createSnakeGameHTML(container);
-    setupSnakeGame();
-    console.log('✅ Snake game initialized');
+    const modalHTML = `
+        <div id="snakeScoreModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;">
+            <div style="background:linear-gradient(135deg,#1a1a2a,#0a0a15);border-radius:32px;padding:32px;max-width:380px;width:90%;text-align:center;border:2px solid #ffd700;position:relative;">
+                <button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.2rem;color:white;">✕</button>
+                <div style="font-size:4rem;margin-bottom:8px;">🐍</div>
+                <h2 style="color:#ffd700;font-size:1.8rem;margin-bottom:16px;">Game Over!</h2>
+                <div style="background:rgba(0,0,0,0.4);border-radius:24px;padding:20px;margin-bottom:24px;">
+                    <span style="display:block;font-size:0.8rem;color:#8b92b0;letter-spacing:2px;margin-bottom:8px;">Your Score</span>
+                    <span style="display:block;font-size:3rem;font-weight:800;color:#ffd700;">${score}</span>
+                </div>
+                <div style="margin-bottom:24px;">
+                    <p style="color:#8b92b0;font-size:0.8rem;margin-bottom:12px;">Share your result:</p>
+                    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                        <button onclick="window.open('${twitterUrl}','_blank')" style="padding:8px 16px;border-radius:40px;border:none;background:#1DA1F2;color:white;cursor:pointer;">🐦 Twitter</button>
+                        <button onclick="window.open('${facebookUrl}','_blank')" style="padding:8px 16px;border-radius:40px;border:none;background:#4267B2;color:white;cursor:pointer;">📘 Facebook</button>
+                        <button onclick="navigator.clipboard.writeText('${shareText}');this.innerHTML='✅ Copied!';setTimeout(()=>this.innerHTML='📋 Copy Score',2000)" style="padding:8px 16px;border-radius:40px;border:none;background:rgba(255,215,0,0.2);border:1px solid #ffd700;color:#ffd700;cursor:pointer;">📋 Copy Score</button>
+                    </div>
+                </div>
+                <button onclick="location.reload()" style="background:linear-gradient(135deg,#ffd700,#ffaa00);border:none;padding:12px;border-radius:40px;font-weight:700;cursor:pointer;width:100%;">🎮 Play Again</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
-// Funkcja dla modala
-function initSnakeGameInModal(container) {
-    console.log('🐍 INIT SNAKE GAME IN MODAL');
-    if (!container) {
-        console.error('No container provided for Snake game modal');
-        return;
+function closeScoreModalAndRestart() {
+    const modal = document.getElementById('snakeScoreModal');
+    if (modal) modal.remove();
+    if (typeof snakeStartGame === 'function') {
+        snakeStartGame();
+    } else {
+        location.reload();
     }
-    
+}
+
+function copyScoreToClipboard(score) {
+    const text = `🐍 I scored ${score} points in GEM FUN Snake! 🎮 Play at: ${window.location.origin}`;
+    navigator.clipboard.writeText(text).then(() => {
+        const copyBtn = document.querySelector('.share-btn.copy');
+        if (copyBtn) {
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '✅ Copied!';
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+            }, 2000);
+        }
+    });
+}
+
+// ============================================
+// RESZTA FUNKCJI GRY
+// ============================================
+
+function initSnakeGame(container) {
+    console.log('🐍 INIT SNAKE GAME - container:', container);
+    if (!container) return;
     createSnakeGameHTML(container);
     setupSnakeGame();
-    console.log('✅ Snake game initialized in modal');
+}
+
+function initSnakeGameInModal(container) {
+    console.log('🐍 INIT SNAKE GAME IN MODAL');
+    if (!container) return;
+    createSnakeGameHTML(container);
+    setupSnakeGame();
 }
 
 function createSnakeGameHTML(container) {
@@ -72,13 +126,9 @@ function createSnakeGameHTML(container) {
 
 function setupSnakeGame() {
     snakeCanvas = document.getElementById('snakeCanvas');
-    if (!snakeCanvas) {
-        console.error('Snake canvas not found!');
-        return;
-    }
+    if (!snakeCanvas) return;
     snakeCtx = snakeCanvas.getContext('2d');
     
-    // Add roundRect if needed
     if (!CanvasRenderingContext2D.prototype.roundRect) {
         CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
             if (w < 2 * r) r = w / 2;
@@ -99,7 +149,6 @@ function setupSnakeGame() {
     snakeInitGame();
     snakeDraw();
     
-    // Event listeners
     const startBtn = document.getElementById('snakeStartBtn');
     const continueBtn = document.getElementById('snakeContinueBtn');
     
@@ -117,7 +166,6 @@ function setupSnakeGame() {
         };
     }
     
-    // Powerup buttons
     document.querySelectorAll('.powerup-btn').forEach(btn => {
         btn.onclick = async (e) => {
             e.preventDefault();
@@ -126,10 +174,10 @@ function setupSnakeGame() {
         };
     });
     
-    // Keyboard controls with preventDefault to stop scrolling
     const keyHandler = (e) => {
         const key = e.key;
-        if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight') {
+        if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || 
+            key === 'w' || key === 'W' || key === 's' || key === 'S' || key === 'a' || key === 'A' || key === 'd' || key === 'D') {
             e.preventDefault();
         }
         
@@ -144,6 +192,15 @@ function setupSnakeGame() {
         } else if (key === 'ArrowDown' && snakeDirection !== 'UP') {
             snakeNextDirection = 'DOWN';
         }
+        else if ((key === 'd' || key === 'D') && snakeDirection !== 'LEFT') {
+            snakeNextDirection = 'RIGHT';
+        } else if ((key === 'a' || key === 'A') && snakeDirection !== 'RIGHT') {
+            snakeNextDirection = 'LEFT';
+        } else if ((key === 'w' || key === 'W') && snakeDirection !== 'DOWN') {
+            snakeNextDirection = 'UP';
+        } else if ((key === 's' || key === 'S') && snakeDirection !== 'UP') {
+            snakeNextDirection = 'DOWN';
+        }
     };
     
     if (window.snakeKeyHandler) {
@@ -153,7 +210,8 @@ function setupSnakeGame() {
     document.addEventListener('keydown', window.snakeKeyHandler);
     
     const preventScroll = (e) => {
-        if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === ' ') {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' || 
+            e.key === 'w' || e.key === 'W' || e.key === 's' || e.key === 'S' || e.key === 'a' || e.key === 'A' || e.key === 'd' || e.key === 'D' || e.key === ' ') {
             e.preventDefault();
         }
     };
@@ -205,7 +263,6 @@ function snakeDraw() {
     snakeCtx.fillStyle = '#0a1a0f';
     snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
     
-    // Grid
     snakeCtx.strokeStyle = 'rgba(255,215,0,0.15)';
     snakeCtx.lineWidth = 0.5;
     for (let i = 0; i <= SNAKE_COLS; i++) {
@@ -219,7 +276,6 @@ function snakeDraw() {
         snakeCtx.stroke();
     }
     
-    // Snake
     snakeData.forEach((segment, index) => {
         const x = segment.x * SNAKE_CELL_SIZE;
         const y = segment.y * SNAKE_CELL_SIZE;
@@ -238,7 +294,6 @@ function snakeDraw() {
         snakeCtx.roundRect(x + 1, y + 1, SNAKE_CELL_SIZE - 2, SNAKE_CELL_SIZE - 2, 4);
         snakeCtx.fill();
         
-        // Eyes for head
         if (index === 0) {
             snakeCtx.fillStyle = '#ffffff';
             snakeCtx.beginPath();
@@ -266,7 +321,6 @@ function snakeDraw() {
         }
     });
     
-    // Food
     const fx = snakeFood.x * SNAKE_CELL_SIZE;
     const fy = snakeFood.y * SNAKE_CELL_SIZE;
     snakeCtx.shadowBlur = 8;
@@ -285,7 +339,6 @@ function snakeDraw() {
     snakeCtx.fill();
     snakeCtx.shadowBlur = 0;
     
-    // Effects
     if (snakePowerups.x2) {
         snakeCtx.fillStyle = 'rgba(255,215,0,0.06)';
         snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
@@ -320,7 +373,6 @@ function snakeMove() {
         snakeData.pop();
     }
     
-    // Collision
     if (newHead.x < 0 || newHead.x >= SNAKE_COLS || newHead.y < 0 || newHead.y >= SNAKE_ROWS) {
         snakeHandleDeath();
         return false;
@@ -353,8 +405,9 @@ async function snakeHandleDeath() {
         if (snakeGameLoop) clearInterval(snakeGameLoop);
         const continueBtn = document.getElementById('snakeContinueBtn');
         if (continueBtn) continueBtn.style.display = 'inline-block';
-        alert(`💀 Game Over! Score: ${snakeScore}`);
         await snakeSaveScore();
+        // POKAŻ MODAL Z WYNIKAMI
+        showScoreModal(snakeScore);
     }
 }
 
@@ -372,7 +425,7 @@ async function snakeSaveScore() {
 function snakeStartGame() {
     console.log('Snake start game called');
     if (!window.userAddress) {
-        alert('🔌 Connect wallet first to play!');
+        console.log('No wallet connected');
         return;
     }
     snakeInitGame();
@@ -392,10 +445,7 @@ function snakeStartGame() {
 }
 
 async function snakeContinueGame() {
-    if (!window.userAddress) {
-        alert('🔌 Connect wallet first!');
-        return;
-    }
+    if (!window.userAddress) return;
     if (window.spendGem) {
         const success = await window.spendGem(5, 'continue snake game');
         if (success) {
@@ -414,16 +464,11 @@ async function snakeContinueGame() {
             snakeDraw();
             if (window.refreshBalance) await window.refreshBalance();
         }
-    } else {
-        alert('🔌 Wallet not ready. Please reconnect.');
     }
 }
 
 async function snakeBuyPowerup(cost, type) {
-    if (!window.userAddress) {
-        alert('🔌 Connect wallet first');
-        return false;
-    }
+    if (!window.userAddress) return false;
     if (window.spendGem) {
         const success = await window.spendGem(cost, `powerup: ${type}`);
         if (success) {
@@ -438,8 +483,11 @@ async function snakeBuyPowerup(cost, type) {
     return false;
 }
 
-// Export functions for global use
+// Eksport funkcji
 window.initSnakeGame = initSnakeGame;
 window.initSnakeGameInModal = initSnakeGameInModal;
+window.showScoreModal = showScoreModal;
+window.closeScoreModalAndRestart = closeScoreModalAndRestart;
+window.copyScoreToClipboard = copyScoreToClipboard;
 
-console.log('✅ Snake game script loaded');
+console.log('✅ Snake game script loaded with score modal');

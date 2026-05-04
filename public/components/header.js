@@ -10,13 +10,45 @@ class HeaderComponent {
         this.init();
     }
 
+    // Funkcja formatująca balans
+    formatBalance(balance) {
+        if (balance === undefined || balance === null) return '0';
+        
+        const num = Number(balance);
+        
+        if (isNaN(num)) return '0';
+        
+        // Dla bardzo dużych liczb (miliony, miliardy)
+        if (num >= 1_000_000_000) {
+            return (num / 1_000_000_000).toFixed(2) + 'B';
+        }
+        if (num >= 1_000_000) {
+            return (num / 1_000_000).toFixed(2) + 'M';
+        }
+        if (num >= 1_000) {
+            return (num / 1_000).toFixed(2) + 'K';
+        }
+        
+        // Dla mniejszych liczb, dodaj separatory tysięcy
+        return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    }
+
     getHTML() {
         return `
             <div class="logo-area">
                 <img src="/Awesome.jpg" alt="GEM FUN" class="gem-logo" id="gemLogo">
                 <h1 class="app-title">GEM<span class="title-accent">FUN</span></h1>
+                <div class="beta-badge" id="betaBadge" style="display: none;">
+                    <span class="beta-icon">🧪</span>
+                    <span class="beta-text">BETA TEST</span>
+                </div>
             </div>
             <div class="wallet-panel">
+                <div class="gem-badge" id="gemBalance" style="display: none;">
+                    <span class="gem-icon">💎</span>
+                    <span class="gem-amount">0</span>
+                    <span class="gem-symbol">GEM</span>
+                </div>
                 <button id="connectWalletBtn" class="wallet-btn">
                     <span class="btn-icon">🔌</span>
                     <span>Connect Wallet</span>
@@ -25,19 +57,6 @@ class HeaderComponent {
                     <span class="btn-icon">🔌</span>
                     <span>Disconnect</span>
                 </button>
-                <div class="wallet-status" id="walletStatus">
-                    <span class="status-dot"></span>
-                    <span class="status-text">Not connected</span>
-                </div>
-                <div class="gem-badge" id="gemBalance">
-                    <span class="gem-icon">💎</span>
-                    <span class="gem-amount">0</span>
-                    <span class="gem-symbol">GEM</span>
-                </div>
-            </div>
-            <div class="trading-bar" id="tradingStatusBar">
-                <span class="trading-icon">⏳</span>
-                <span class="trading-text">Checking token status...</span>
             </div>
         `;
     }
@@ -49,52 +68,33 @@ class HeaderComponent {
         
         const connectBtn = document.getElementById('connectWalletBtn');
         const disconnectBtn = document.getElementById('disconnectWalletBtn');
-        const walletStatus = document.getElementById('walletStatus');
         const gemBalanceSpan = document.getElementById('gemBalance');
-        const tradingBar = document.getElementById('tradingStatusBar');
+        const betaBadge = document.getElementById('betaBadge');
 
         if (address) {
-            if (connectBtn) connectBtn.style.display = 'none';
+            // Połączony - pokaż balans, beta badge i disconnect
+            if (gemBalanceSpan) {
+                gemBalanceSpan.style.display = 'flex';
+                const amountSpan = gemBalanceSpan.querySelector('.gem-amount');
+                if (amountSpan) amountSpan.innerText = this.formatBalance(balance);
+            }
+            if (betaBadge) betaBadge.style.display = 'flex';
+            if (connectBtn) {
+                connectBtn.style.display = 'flex';
+                const btnSpan = connectBtn.querySelector('span:last-child');
+                if (btnSpan) btnSpan.innerText = `${address.slice(0,6)}...${address.slice(-4)}`;
+            }
             if (disconnectBtn) disconnectBtn.style.display = 'flex';
-            if (walletStatus) {
-                const statusText = walletStatus.querySelector('.status-text');
-                const statusDot = walletStatus.querySelector('.status-dot');
-                if (statusText) statusText.innerText = `${address.slice(0,6)}...${address.slice(-4)}`;
-                if (statusDot) statusDot.classList.add('connected');
-            }
-            if (gemBalanceSpan) {
-                const amountSpan = gemBalanceSpan.querySelector('.gem-amount');
-                if (amountSpan) amountSpan.innerText = balance.toFixed(2);
-            }
         } else {
-            if (connectBtn) connectBtn.style.display = 'flex';
+            // Niepołączony - ukryj balans, beta badge, pokaż "Connect Wallet"
+            if (gemBalanceSpan) gemBalanceSpan.style.display = 'none';
+            if (betaBadge) betaBadge.style.display = 'none';
+            if (connectBtn) {
+                connectBtn.style.display = 'flex';
+                const btnSpan = connectBtn.querySelector('span:last-child');
+                if (btnSpan) btnSpan.innerText = 'Connect Wallet';
+            }
             if (disconnectBtn) disconnectBtn.style.display = 'none';
-            if (walletStatus) {
-                const statusText = walletStatus.querySelector('.status-text');
-                const statusDot = walletStatus.querySelector('.status-dot');
-                if (statusText) statusText.innerText = 'Not connected';
-                if (statusDot) statusDot.classList.remove('connected');
-            }
-            if (gemBalanceSpan) {
-                const amountSpan = gemBalanceSpan.querySelector('.gem-amount');
-                if (amountSpan) amountSpan.innerText = '0';
-            }
-        }
-
-        if (tradingBar) {
-            if (tradingEnabled) {
-                tradingBar.classList.add('active');
-                const icon = tradingBar.querySelector('.trading-icon');
-                const text = tradingBar.querySelector('.trading-text');
-                if (icon) icon.innerHTML = '✅';
-                if (text) text.innerHTML = 'Trading active - GEM tokens ready!';
-            } else {
-                tradingBar.classList.remove('active');
-                const icon = tradingBar.querySelector('.trading-icon');
-                const text = tradingBar.querySelector('.trading-text');
-                if (icon) icon.innerHTML = '⏳';
-                if (text) text.innerHTML = 'Token locked (pre-migration)';
-            }
         }
     }
 

@@ -17,15 +17,47 @@ function updateRequirementMessage(balance) {
     const requirementMsg = document.querySelector('.gem-requirement');
     if (!requirementMsg) return;
     
+    const heroSection = document.querySelector('.hero');
+    const whyPlay = document.querySelector('.why-play');
+    const rankingsCustom = document.querySelector('.ranking-custom');
+    const rewards = document.querySelector('.rewards');
+    const events = document.querySelector('.events');
+    const whyLogin = document.querySelector('.why-login');
+    const howItWorks = document.querySelector('.how-it-works');
+    const finalCta = document.querySelector('.final-cta');
+    
     const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
     const tokenAddress = '0xf8a02b86e09319e615534cd8ff034a527261072f';
     const buyLink = 'https://hashcoin.farm/gem';
     
     if (!window.userAddress) {
+        // Not connected - show everything, show connect message
+        if (heroSection) heroSection.style.display = 'block';
+        if (whyPlay) whyPlay.style.display = 'block';
+        if (rankingsCustom) rankingsCustom.style.display = 'block';
+        if (rewards) rewards.style.display = 'block';
+        if (events) events.style.display = 'block';
+        if (whyLogin) whyLogin.style.display = 'block';
+        if (howItWorks) howItWorks.style.display = 'block';
+        if (finalCta) finalCta.style.display = 'flex';
         requirementMsg.style.display = 'block';
         requirementMsg.innerHTML = '🔌 Please connect your wallet first to play games!';
         requirementMsg.style.borderColor = '#ff9800';
+        requirementMsg.style.background = 'linear-gradient(135deg, rgba(255,215,0,0.15), rgba(0,0,0,0.3))';
+        requirementMsg.style.borderRadius = '40px';
+        requirementMsg.style.padding = '12px 24px';
+        requirementMsg.style.maxWidth = '100%';
+        requirementMsg.style.margin = '20px 0';
     } else if (balance < minRequired) {
+        // Connected but insufficient GEM - HIDE marketing sections, show requirement with buy link
+        if (heroSection) heroSection.style.display = 'none';
+        if (whyPlay) whyPlay.style.display = 'none';
+        if (rankingsCustom) rankingsCustom.style.display = 'none';
+        if (rewards) rewards.style.display = 'none';
+        if (events) events.style.display = 'none';
+        if (whyLogin) whyLogin.style.display = 'none';
+        if (howItWorks) howItWorks.style.display = 'none';
+        if (finalCta) finalCta.style.display = 'none';
         requirementMsg.style.display = 'block';
         requirementMsg.innerHTML = `
             ⚠️ You need <strong>${minRequired.toLocaleString()} GEM FUN</strong> to play games.<br>
@@ -39,7 +71,21 @@ function updateRequirementMessage(balance) {
             </a>
         `;
         requirementMsg.style.borderColor = '#f44336';
+        requirementMsg.style.background = 'linear-gradient(135deg, rgba(255,215,0,0.15), rgba(0,0,0,0.3))';
+        requirementMsg.style.borderRadius = '40px';
+        requirementMsg.style.padding = '12px 24px';
+        requirementMsg.style.maxWidth = '100%';
+        requirementMsg.style.margin = '20px 0';
     } else {
+        // Connected and has enough GEM - HIDE marketing sections, HIDE requirement
+        if (heroSection) heroSection.style.display = 'none';
+        if (whyPlay) whyPlay.style.display = 'none';
+        if (rankingsCustom) rankingsCustom.style.display = 'none';
+        if (rewards) rewards.style.display = 'none';
+        if (events) events.style.display = 'none';
+        if (whyLogin) whyLogin.style.display = 'none';
+        if (howItWorks) howItWorks.style.display = 'none';
+        if (finalCta) finalCta.style.display = 'none';
         requirementMsg.style.display = 'none';
     }
 }
@@ -220,3 +266,25 @@ if (document.readyState === 'loading') {
 } else {
     initApp();
 }
+
+// CTA buttons handlers
+document.addEventListener('DOMContentLoaded', () => {
+    const ctaBtn = document.getElementById('finalCtaBtn');
+    const heroCtaBtn = document.getElementById('heroCtaBtn');
+    
+    const handleConnect = () => {
+        if (!window.userAddress) {
+            if (window.connectWallet) {
+                window.connectWallet();
+            } else {
+                const connectBtn = document.getElementById('connectWalletBtn');
+                if (connectBtn) connectBtn.click();
+            }
+        } else {
+            document.querySelector('.games-section')?.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+    
+    if (ctaBtn) ctaBtn.onclick = handleConnect;
+    if (heroCtaBtn) heroCtaBtn.onclick = handleConnect;
+});
