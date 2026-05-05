@@ -11,61 +11,288 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .title-blue {
+            color: #3b82f6 !important;
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+        }
+
+        .title-accent {
+            background: linear-gradient(135deg, #ffd700, #ff8c00) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            color: transparent !important;
+        }
+
+        .header {
+            border: none;
+        }
+
+        .banner-section {
+            padding: 2rem 1.5rem;
+            background: transparent;
+            border-radius: 2rem;
+            margin: 4rem 0 5rem 0;
+            position: relative;
+        }
+
+        .banner-section::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            border-radius: 2rem;
+            background: linear-gradient(270deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0.01) 30%, rgba(255,215,0,0.03) 70%, rgba(255,215,0,0.05) 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .banner-wrapper {
+            display: flex;
+            align-items: stretch;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .banner-content {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .banner-image-wrapper {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: auto;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .banner-image:hover {
+            transform: scale(1.02);
+        }
+
+        .banner-top {
+            width: 100%;
+        }
+
+        .banner-badge {
+            display: inline-block;
+            background: rgba(255,215,0,0.15);
+            color: #ffd700;
+            padding: 0.25rem 0.7rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .banner-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            line-height: 1.2;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .banner-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .stat-icon {
+            font-size: 1rem;
+        }
+
+        .stat-text {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .utility-section {
+            margin: 1rem 0;
+        }
+
+        .utility-badge {
+            display: inline-block;
+            background: rgba(255,215,0,0.15);
+            color: #ffd700;
+            padding: 0.25rem 0.7rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+
+        .utility-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .utility-description {
+            color: #ccc;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .mining-hash-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.4rem 0.8rem;
+            border-radius: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            width: fit-content;
+        }
+
+        .mining-hash-badge span {
+            color: #ccc;
+            font-size: 0.7rem;
+        }
+
+        .mining-logo {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .mining-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .mining-link:hover {
+            text-decoration: underline;
+            color: #ffd700;
+        }
+
+        .link-icon {
+            font-size: 0.75rem;
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .banner-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .banner-stats {
+                justify-content: center;
+            }
+            
+            .banner-title {
+                font-size: 1.4rem;
+            }
+
+            .utility-title {
+                font-size: 1.1rem;
+            }
+
+            .mining-hash-badge {
+                justify-content: center;
+                margin-top: 1.5rem;
+            }
+
+            .banner-content {
+                text-align: center;
+                align-items: center;
+            }
+
+            .utility-section {
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
         <header class="header" id="mainHeader"></header>
 
         <div class="content-scroll">
-            <section class="hero">
-                <h1 class="hero-title">🎮 Welcome to GEM FUN Arcade</h1>
-                <p class="hero-subtitle">
-                    Play classic games, earn GEM FUN tokens and compete with other players on global leaderboards.<br>
-                    Connect wallet to start!
-                </p>
-            </section>
-
             <section class="banner-section">
-                <div class="hero-banner">
-                    <img src="/baner.png" alt="GEM FUN Arcade Banner" class="banner-image">
-                </div>
-            </section>
+                <div class="banner-wrapper">
+                    <div class="banner-content">
+                        <div class="banner-top">
+                            <span class="banner-badge">🎮 NEXT-GEN ARCADE</span>
+                            <h2 class="banner-title">Play Arcade Games. <span class="gradient-text">Earn Real Rewards</span></h2>
+                            <div class="banner-stats">
+                                <div class="stat">
+                                    <span class="stat-icon">🎮</span>
+                                    <span class="stat-text">Classic Games</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-icon">🏆</span>
+                                    <span class="stat-text">Live Leaderboards</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-icon">💎</span>
+                                    <span class="stat-text">Token Rewards</span>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="hero-platform-card">
-                <div class="platform-icon">⛏️</div>
-                <div class="platform-content">
-                    <div class="platform-desc"><strong>A decentralized ecosystem supported by</strong></div>
-                    <div class="platform-creators">
-                        <a href="https://x.com/LookHookInfo" target="_blank" rel="noopener noreferrer" class="creator-badge">
-                            <img src="/Look.jpg" alt="Look Hook Dev" class="creator-logo">
-                            <span class="creator-name">Look Hook Dev</span>
-                            <span class="creator-handle">@LookHookInfo</span>
-                            <span class="x-icon">𝕏</span>
-                        </a>
-                        <span class="creator-separator">&</span>
-                        <a href="https://x.com/HashCoinFarm" target="_blank" rel="noopener noreferrer" class="creator-badge">
-                            <img src="/hash.jpg" alt="Hash Coin" class="creator-logo">
-                            <span class="creator-name">Hash Coin</span>
-                            <span class="creator-handle">@HashCoinFarm</span>
-                            <span class="x-icon">𝕏</span>
-                        </a>
-                        <span class="creator-separator">&</span>
-                        <a href="https://x.com/Mystic_pol" target="_blank" rel="noopener noreferrer" class="creator-badge">
-                            <img src="/Mystic.jpg" alt="Mysticpol" class="creator-logo">
-                            <span class="creator-name">Mysticpol</span>
-                            <span class="creator-handle">@Mystic_pol</span>
-                            <span class="x-icon">𝕏</span>
-                        </a>
-                        <span class="creator-separator">&</span>
-                        <a href="https://x.com/HUB_Ecosystem" target="_blank" rel="noopener noreferrer" class="creator-badge">
-                            <img src="/HUB.jpg" alt="HUB Ecosystem" class="creator-logo">
-                            <span class="creator-name">HUB Ecosystem</span>
-                            <span class="creator-handle">@HUB_Ecosystem</span>
-                            <span class="x-icon">𝕏</span>
-                        </a>
+                        <div class="utility-section">
+                            <span class="utility-badge">💎 TOKEN UTILITY</span>
+                            <div class="utility-title">Required to play, powered by <span style="color: #3b82f6;">GEM</span> FUN</div>
+                            <div class="utility-description">Token balance determines your access. Hold <span style="color: #3b82f6;">GEM</span> FUN to unlock the full arcade experience.</div>
+                        </div>
+
+                        <div class="mining-hash-badge">
+                            <img src="/Awesome.jpg" alt="GEM FUN" class="mining-logo">
+                            <span>Powered by</span>
+                            <img src="/hash.jpg" alt="MINING HASH" class="mining-logo">
+                            <a href="https://hashcoin.farm/gem" target="_blank" class="mining-link">
+                                <span class="link-icon">🔗</span>
+                                <strong>MINING HASH</strong>
+                            </a>
+                            <span>| GEM FUN Platform © 2026</span>
+                        </div>
+                    </div>
+                    <div class="banner-image-wrapper">
+                        <img src="/Baner.png" alt="GEM FUN Arcade Banner" class="banner-image">
                     </div>
                 </div>
-            </div>
+            </section>
 
             <section class="token-ecosystem" id="tokenEcosystemSection">
                 <div class="eco-header">
@@ -212,6 +439,42 @@
                     </div>
                 </div>
             </section>
+
+            <div class="hero-platform-card">
+                <div class="platform-icon">⛏️</div>
+                <div class="platform-content">
+                    <div class="platform-desc"><strong>A decentralized ecosystem supported by</strong></div>
+                    <div class="platform-creators">
+                        <a href="https://x.com/LookHookInfo" target="_blank" rel="noopener noreferrer" class="creator-badge">
+                            <img src="/Look.jpg" alt="Look Hook Dev" class="creator-logo">
+                            <span class="creator-name">Look Hook Dev</span>
+                            <span class="creator-handle">@LookHookInfo</span>
+                            <span class="x-icon">𝕏</span>
+                        </a>
+                        <span class="creator-separator">&</span>
+                        <a href="https://x.com/HashCoinFarm" target="_blank" rel="noopener noreferrer" class="creator-badge">
+                            <img src="/hash.jpg" alt="Hash Coin" class="creator-logo">
+                            <span class="creator-name">Hash Coin</span>
+                            <span class="creator-handle">@HashCoinFarm</span>
+                            <span class="x-icon">𝕏</span>
+                        </a>
+                        <span class="creator-separator">&</span>
+                        <a href="https://x.com/Mystic_pol" target="_blank" rel="noopener noreferrer" class="creator-badge">
+                            <img src="/Mystic.jpg" alt="Mysticpol" class="creator-logo">
+                            <span class="creator-name">Mysticpol</span>
+                            <span class="creator-handle">@Mystic_pol</span>
+                            <span class="x-icon">𝕏</span>
+                        </a>
+                        <span class="creator-separator">&</span>
+                        <a href="https://x.com/HUB_Ecosystem" target="_blank" rel="noopener noreferrer" class="creator-badge">
+                            <img src="/HUB.jpg" alt="HUB Ecosystem" class="creator-logo">
+                            <span class="creator-name">HUB Ecosystem</span>
+                            <span class="creator-handle">@HUB_Ecosystem</span>
+                            <span class="x-icon">𝕏</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
             <footer class="footer">
                 <div class="footer-content">
