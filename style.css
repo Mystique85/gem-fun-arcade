@@ -1681,3 +1681,48 @@ body {
         align-items: center;
     }
 }
+
+/* HERO BANNER */
+.hero-banner {
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .hero-banner {
+        border-radius: 16px;
+        margin-bottom: 16px;
+    }
+}
+
+.title-blue {
+    color: #3b82f6; /* niebieski kolor */
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+}
+
+/* Style dla napisu w headerze */
+.title-blue {
+    color: #3b82f6 !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+}
+
+.title-accent {
+    background: linear-gradient(135deg, #ffd700, #ff8c00) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+}

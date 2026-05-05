@@ -1,16 +1,10 @@
-// ============================================
-// HEADER COMPONENT - ZAOKRĄGLONY, STAŁY
-// ============================================
-
 class HeaderComponent {
     constructor() {
         this.userAddress = null;
         this.gemBalance = 0;
         this.tradingEnabled = false;
-        this.init();
     }
 
-    // Funkcja formatująca balans
     formatBalance(balance) {
         if (balance === undefined || balance === null) return '0';
         
@@ -18,7 +12,6 @@ class HeaderComponent {
         
         if (isNaN(num)) return '0';
         
-        // Dla bardzo dużych liczb (miliony, miliardy)
         if (num >= 1_000_000_000) {
             return (num / 1_000_000_000).toFixed(2) + 'B';
         }
@@ -29,7 +22,6 @@ class HeaderComponent {
             return (num / 1_000).toFixed(2) + 'K';
         }
         
-        // Dla mniejszych liczb, dodaj separatory tysięcy
         return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
     }
 
@@ -37,7 +29,7 @@ class HeaderComponent {
         return `
             <div class="logo-area">
                 <img src="/Awesome.jpg" alt="GEM FUN" class="gem-logo" id="gemLogo">
-                <h1 class="app-title">GEM<span class="title-accent">FUN</span></h1>
+                <h1 class="app-title"><span class="title-blue">GEM</span> <span class="title-accent">FUN</span></h1>
                 <div class="beta-badge" id="betaBadge" style="display: none;">
                     <span class="beta-icon">🧪</span>
                     <span class="beta-text">BETA TEST</span>
@@ -72,7 +64,6 @@ class HeaderComponent {
         const betaBadge = document.getElementById('betaBadge');
 
         if (address) {
-            // Połączony - pokaż balans, beta badge i disconnect
             if (gemBalanceSpan) {
                 gemBalanceSpan.style.display = 'flex';
                 const amountSpan = gemBalanceSpan.querySelector('.gem-amount');
@@ -86,7 +77,6 @@ class HeaderComponent {
             }
             if (disconnectBtn) disconnectBtn.style.display = 'flex';
         } else {
-            // Niepołączony - ukryj balans, beta badge, pokaż "Connect Wallet"
             if (gemBalanceSpan) gemBalanceSpan.style.display = 'none';
             if (betaBadge) betaBadge.style.display = 'none';
             if (connectBtn) {
@@ -97,11 +87,6 @@ class HeaderComponent {
             if (disconnectBtn) disconnectBtn.style.display = 'none';
         }
     }
-
-    init() {
-        console.log('✅ Header component initialized');
-    }
 }
 
-// Eksportuj dla globalnego użycia
 window.HeaderComponent = HeaderComponent;

@@ -1,20 +1,15 @@
-// ============================================
-// HEADER COMPONENT - ZAOKRĄGLONY, STAŁY
-// ============================================
-
 class HeaderComponent {
     constructor() {
         this.userAddress = null;
         this.gemBalance = 0;
         this.tradingEnabled = false;
-        this.init();
     }
 
     getHTML() {
         return `
             <div class="logo-area">
                 <img src="/Awesome.jpg" alt="GEM FUN" class="gem-logo" id="gemLogo">
-                <h1 class="app-title">GEM<span class="title-accent">FUN</span></h1>
+                <h1 class="app-title"><span class="title-blue">GEM</span> <span class="title-accent">FUN</span></h1>
             </div>
             <div class="wallet-panel">
                 <button id="connectWalletBtn" class="wallet-btn">
@@ -97,11 +92,6 @@ class HeaderComponent {
             }
         }
     }
-
-    init() {
-        console.log('✅ Header component initialized');
-    }
 }
 
-// Eksportuj dla globalnego użycia
 window.HeaderComponent = HeaderComponent;
