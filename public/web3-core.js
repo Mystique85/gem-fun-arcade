@@ -1,3 +1,4 @@
+// web3-core.js
 if (typeof window.web3Initialized === 'undefined') {
     window.web3Initialized = true;
 
@@ -57,6 +58,7 @@ if (typeof window.web3Initialized === 'undefined') {
         userAddress = null;
         tokenContract = null;
         web3 = null;
+        window.web3 = null;
         
         updateHeaderUI();
         
@@ -150,6 +152,7 @@ if (typeof window.web3Initialized === 'undefined') {
                 
                 userAddress = accounts[0];
                 web3 = new Web3(window.ethereum);
+                window.web3 = web3;
                 
                 const chainId = await web3.eth.getChainId();
                 if (chainId !== 8453) {
@@ -196,7 +199,6 @@ if (typeof window.web3Initialized === 'undefined') {
         }
     }
 
-    // Automatyczne przywracanie połączenia po odświeżeniu strony
     async function restoreConnection() {
         if (typeof window.ethereum !== 'undefined') {
             try {
@@ -205,6 +207,7 @@ if (typeof window.web3Initialized === 'undefined') {
                     console.log('🟡 Restoring previous wallet connection...');
                     userAddress = accounts[0];
                     web3 = new Web3(window.ethereum);
+                    window.web3 = web3;
                     
                     const chainId = await web3.eth.getChainId();
                     if (chainId !== 8453) {
@@ -258,7 +261,6 @@ if (typeof window.web3Initialized === 'undefined') {
         }
     };
 
-    // Wywołaj przywracanie połączenia po załadowaniu strony
     setTimeout(() => {
         restoreConnection();
     }, 500);

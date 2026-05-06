@@ -31,7 +31,6 @@ body {
     position: relative;
 }
 
-/* HEADER */
 .header {
     position: sticky;
     top: 16px;
@@ -85,7 +84,6 @@ body {
     color: transparent;
 }
 
-/* WALLET PANEL */
 .wallet-panel {
     display: flex;
     align-items: center;
@@ -123,29 +121,6 @@ body {
     border-color: #f44336;
 }
 
-.wallet-status {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(0,0,0,0.3);
-    padding: 4px 12px;
-    border-radius: 40px;
-    font-size: 0.75rem;
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    background: #f44336;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.status-dot.connected {
-    background: #4caf50;
-    box-shadow: 0 0 5px #4caf50;
-}
-
 .gem-badge {
     background: linear-gradient(135deg, #2a2a1a, #1a1a0a);
     padding: 6px 14px;
@@ -162,23 +137,6 @@ body {
 .gem-amount { color: var(--primary); font-size: 1rem; }
 .gem-symbol { color: #8b92b0; font-size: 0.7rem; }
 
-/* TRADING BAR */
-.trading-bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0,0,0,0.3);
-    padding: 6px 14px;
-    border-radius: 40px;
-    font-size: 0.7rem;
-}
-
-.trading-bar.active {
-    background: rgba(76, 175, 80, 0.15);
-    border: 1px solid #4caf50;
-}
-
-/* CONTENT SCROLL */
 .content-scroll {
     flex: 1;
     overflow-y: auto;
@@ -200,7 +158,6 @@ body {
     border-radius: 10px;
 }
 
-/* BANNER SECTION */
 .banner-section {
     padding: 2rem 1.5rem;
     background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, rgba(0,0,0,0) 100%);
@@ -287,13 +244,6 @@ body {
     color: #fff;
 }
 
-.banner-description {
-    color: #ccc;
-    line-height: 1.4;
-    margin-bottom: 0;
-    font-size: 0.85rem;
-}
-
 .mining-hash-badge {
     display: flex;
     align-items: center;
@@ -332,150 +282,202 @@ body {
     text-decoration: underline;
 }
 
-.link-icon {
-    font-size: 0.75rem;
+.curve-progress-section {
+    max-width: 900px;
+    margin: -20px auto 40px auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
 }
 
-/* HERO PLATFORM CARD */
-.hero-platform-card {
-    background: linear-gradient(135deg, rgba(18, 22, 35, 0.8), rgba(10, 12, 21, 0.6));
+.curve-container {
+    background: linear-gradient(135deg, rgba(10, 20, 40, 0.95), rgba(0, 0, 0, 0.85));
     backdrop-filter: blur(12px);
-    border-radius: 24px;
-    padding: 20px 24px;
-    margin-top: 32px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    border: 1px solid rgba(255,215,0,0.2);
-}
-
-.platform-icon {
-    font-size: 2rem;
-    background: linear-gradient(135deg, #ffd700, #ffaa00);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    width: 60px;
-    text-align: center;
-}
-
-.platform-content {
-    flex: 1;
-}
-
-.platform-desc {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #ffd700;
-    margin-bottom: 12px;
-}
-
-.platform-creators {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.creator-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255,215,0,0.2);
-    border-radius: 40px;
-    padding: 6px 14px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.creator-badge:hover {
-    border-color: #ffd700;
-    transform: translateY(-2px);
-    background: rgba(255,215,0,0.05);
-}
-
-.creator-logo {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid rgba(255,215,0,0.3);
-}
-
-.creator-name {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #eef2ff;
-}
-
-.creator-handle {
-    font-size: 0.7rem;
-    color: #8b92b0;
-}
-
-.x-icon {
-    font-size: 0.8rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #1DA1F2, #0d8bd9);
-    color: #fff;
-    padding: 2px 6px;
-    border-radius: 20px;
-}
-
-.creator-separator {
-    color: #ffd700;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-/* GEM REQUIREMENT */
-.gem-requirement {
-    background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(0,0,0,0.3));
-    border: 1px solid var(--primary);
-    border-radius: 40px;
-    padding: 12px 24px;
-    text-align: center;
-    margin: 20px 0;
-    font-size: 0.9rem;
+    border-radius: 28px;
+    padding: 24px;
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     transition: all 0.3s ease;
 }
 
-.gem-requirement strong {
-    color: var(--primary);
-    font-weight: 800;
+.curve-container:hover {
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 12px 40px rgba(255, 215, 0, 0.1);
 }
 
-.gem-requirement a {
-    color: var(--primary);
-    text-decoration: none;
-    transition: all 0.2s;
+.curve-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.gem-requirement a:hover {
-    text-decoration: underline;
-    text-shadow: 0 0 5px var(--primary-glow);
+.curve-title-with-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.contract-address {
-    font-family: monospace;
-    font-size: 0.75rem;
-    background: rgba(0,0,0,0.3);
-    padding: 4px 12px;
+.curve-logo-container {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    padding: 2px;
+    flex-shrink: 0;
+}
+
+.curve-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.curve-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffd700;
+}
+
+.curve-status-badge {
+    padding: 5px 14px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: rgba(0, 198, 255, 0.15);
+    color: #00c6ff;
+    border: 1px solid rgba(0, 198, 255, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.curve-status-badge.completed {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+    border-color: rgba(0, 255, 136, 0.4);
+    animation: pulse 1.8s infinite;
+}
+
+.curve-status-badge.migrated {
+    background: rgba(255, 165, 0, 0.15);
+    color: #ffa500;
+    border-color: rgba(255, 165, 0, 0.4);
+}
+
+.curve-stats-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.curve-stat-card {
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
     border-radius: 20px;
-    cursor: pointer;
-    display: inline-block;
+}
+
+.curve-stat-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.curve-stat-label {
+    font-size: 0.7rem;
+    opacity: 0.6;
     margin-top: 6px;
-    transition: all 0.2s ease;
 }
 
-.contract-address:hover {
-    background: rgba(255,215,0,0.2);
-    transform: scale(1.02);
+.progress-wrapper {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 60px;
+    height: 32px;
+    margin: 20px 0;
+    overflow: hidden;
 }
 
-/* TOKEN ECOSYSTEM SECTION */
+.progress-bar-fill {
+    background: linear-gradient(90deg, #ffd700, #ff8c00, #ff6b6b);
+    height: 100%;
+    border-radius: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+}
+
+.progress-text {
+    color: #000;
+    font-weight: 800;
+    font-size: 0.75rem;
+}
+
+.curve-message {
+    text-align: center;
+    margin: 12px 0;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    border-radius: 20px;
+}
+
+.curve-message.info {
+    background: rgba(0, 198, 255, 0.08);
+    color: #00c6ff;
+}
+
+.curve-message.success {
+    background: rgba(0, 255, 136, 0.08);
+    color: #00ff88;
+}
+
+.curve-target-info {
+    text-align: center;
+    font-size: 0.7rem;
+    opacity: 0.5;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.curve-buy-link {
+    text-align: center;
+    margin-top: 14px;
+}
+
+.curve-buy-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 0, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    padding: 6px 18px;
+    border-radius: 40px;
+    color: #ffd700;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.curve-buy-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.2));
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: translateY(-2px);
+}
+
 .token-ecosystem {
     background: linear-gradient(135deg, rgba(18, 22, 35, 0.9), rgba(10, 12, 21, 0.7));
     backdrop-filter: blur(12px);
@@ -483,7 +485,6 @@ body {
     padding: 32px;
     margin: 30px 0;
     border: 1px solid rgba(255,215,0,0.2);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
 .eco-header {
@@ -497,7 +498,6 @@ body {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ffd700;
-    box-shadow: 0 0 20px rgba(255,215,0,0.3);
     margin-bottom: 12px;
 }
 
@@ -511,19 +511,12 @@ body {
     font-weight: 700;
 }
 
-.highlight-gold {
-    color: #ffd700;
-    font-weight: 700;
-    border-bottom: 2px dotted #ffd700;
-}
-
 .eco-box {
     background: rgba(0,0,0,0.3);
     border-radius: 24px;
     padding: 20px;
     text-align: center;
     margin-bottom: 24px;
-    border: 1px solid rgba(255,215,0,0.15);
 }
 
 .eco-box p {
@@ -537,7 +530,6 @@ body {
     color: #ffaa44;
 }
 
-/* ECO STEPS */
 .eco-steps {
     display: flex;
     justify-content: center;
@@ -560,12 +552,6 @@ body {
     font-size: 0.85rem;
     font-weight: 500;
     color: #eef2ff;
-    transition: all 0.2s;
-}
-
-.step-node:hover {
-    background: rgba(255,215,0,0.2);
-    transform: translateY(-2px);
 }
 
 .step-icon {
@@ -586,7 +572,6 @@ body {
     font-weight: 700;
 }
 
-/* ECO FUTURE */
 .eco-future {
     background: linear-gradient(135deg, rgba(255,215,0,0.05), rgba(0,0,0,0.2));
     border-radius: 24px;
@@ -618,34 +603,6 @@ body {
     line-height: 1.5;
 }
 
-.highlight-cyan {
-    color: #00bcd4;
-    font-weight: 700;
-}
-
-.highlight-base {
-    color: #0052ff;
-    font-weight: 700;
-}
-
-.btn-link {
-    display: inline-block;
-    background: linear-gradient(135deg, #ffd700, #ffaa00);
-    color: #1a1a1a;
-    padding: 6px 16px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.8rem;
-    margin-left: 8px;
-    transition: all 0.2s;
-}
-
-.btn-link:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 10px rgba(255,215,0,0.4);
-}
-
 .future-highlight {
     background: rgba(255,215,0,0.08);
     padding: 12px 16px;
@@ -662,7 +619,6 @@ body {
     color: #ffd700;
     font-size: 0.85rem;
     text-align: center;
-    letter-spacing: 0.5px;
 }
 
 .gradient-text {
@@ -673,7 +629,6 @@ body {
     font-weight: 600;
 }
 
-/* WHY PLAY SECTION */
 .why-play, .ranking-custom, .rewards, .events, .why-login, .how-it-works {
     background: rgba(8, 10, 18, 0.5);
     border-radius: 32px;
@@ -734,7 +689,6 @@ body {
     color: #8b92b0;
 }
 
-/* RANKINGS */
 .ranking-content {
     display: flex;
     flex-wrap: wrap;
@@ -789,7 +743,6 @@ body {
     margin-bottom: 8px;
 }
 
-/* REWARDS */
 .rewards {
     text-align: center;
 }
@@ -815,7 +768,6 @@ body {
     font-size: 0.85rem;
 }
 
-/* EVENTS */
 .events {
     text-align: center;
 }
@@ -823,9 +775,6 @@ body {
 .events p {
     color: #8b92b0;
     margin-bottom: 24px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .events-grid {
@@ -844,7 +793,6 @@ body {
     font-weight: 600;
 }
 
-/* WHY LOGIN */
 .login-benefits {
     display: flex;
     justify-content: center;
@@ -861,7 +809,6 @@ body {
     border: 1px solid rgba(255,215,0,0.2);
 }
 
-/* HOW IT WORKS */
 .steps {
     display: flex;
     justify-content: center;
@@ -907,7 +854,16 @@ body {
     color: #8b92b0;
 }
 
-/* GAMES SECTION */
+.gem-requirement {
+    background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(0,0,0,0.3));
+    border: 1px solid var(--primary);
+    border-radius: 40px;
+    padding: 12px 24px;
+    text-align: center;
+    margin: 20px 0;
+    font-size: 0.9rem;
+}
+
 .games-section {
     background: rgba(8, 10, 18, 0.5);
     border-radius: 32px;
@@ -929,14 +885,11 @@ body {
     border: 1px solid var(--border-glow);
     transition: all 0.3s ease;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
 }
 
 .game-card:hover {
     transform: translateY(-6px);
     border-color: var(--primary);
-    box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
 }
 
 .game-card-icon {
@@ -965,7 +918,6 @@ body {
     display: inline-block;
 }
 
-/* LEADERBOARD SECTION */
 .leaderboard-section {
     background: rgba(8, 10, 18, 0.5);
     border-radius: 32px;
@@ -1030,7 +982,97 @@ body {
     color: #8b92b0;
 }
 
-/* FOOTER */
+.hero-platform-card {
+    background: linear-gradient(135deg, rgba(18, 22, 35, 0.8), rgba(10, 12, 21, 0.6));
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 20px 24px;
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    border: 1px solid rgba(255,215,0,0.2);
+}
+
+.platform-icon {
+    font-size: 2rem;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    width: 60px;
+    text-align: center;
+}
+
+.platform-content {
+    flex: 1;
+}
+
+.platform-desc {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffd700;
+    margin-bottom: 12px;
+}
+
+.platform-creators {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.creator-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 40px;
+    padding: 6px 14px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.creator-badge:hover {
+    border-color: #ffd700;
+    transform: translateY(-2px);
+}
+
+.creator-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.creator-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #eef2ff;
+}
+
+.creator-handle {
+    font-size: 0.7rem;
+    color: #8b92b0;
+}
+
+.x-icon {
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1DA1F2, #0d8bd9);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 20px;
+}
+
+.creator-separator {
+    color: #ffd700;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
 .footer {
     background: rgba(10, 12, 21, 0.6);
     border-radius: 24px;
@@ -1049,7 +1091,6 @@ body {
 .footer-copyright {
     font-size: 0.75rem;
     color: #8b92b0;
-    letter-spacing: 0.3px;
 }
 
 .beta-note {
@@ -1064,25 +1105,16 @@ body {
     flex-wrap: wrap;
 }
 
-.beta-note strong {
-    color: #ffaa44;
-    font-weight: 700;
-}
-
 .discord-link {
     color: #5865F2;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.75rem;
-    transition: opacity 0.2s;
 }
 
 .discord-link:hover {
     text-decoration: underline;
-    opacity: 0.8;
 }
 
-/* GAME MODAL */
 .game-modal {
     display: none;
     position: fixed;
@@ -1119,7 +1151,6 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
 }
 
 .modal-header {
@@ -1163,7 +1194,6 @@ body {
     flex-direction: column;
 }
 
-/* GAME UI */
 .game-frame {
     display: flex;
     flex-direction: column;
@@ -1238,8 +1268,6 @@ body {
     font-weight: 600;
     cursor: pointer;
     color: #ffcc80;
-    min-width: 70px;
-    white-space: nowrap;
 }
 
 .powerup-btn:hover {
@@ -1259,7 +1287,6 @@ body {
     color: #eef2ff;
     font-weight: 600;
     cursor: pointer;
-    min-width: 100px;
 }
 
 .game-btn.primary {
@@ -1271,144 +1298,11 @@ body {
     background: rgba(255,255,255,0.2);
 }
 
-/* SCORE MODAL */
-.score-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(8px);
-    z-index: 2000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.score-modal {
-    background: linear-gradient(135deg, #1a1a2a, #0a0a15);
-    border-radius: 32px;
-    padding: 32px;
-    max-width: 380px;
-    width: 90%;
-    text-align: center;
-    border: 2px solid #ffd700;
-    position: relative;
-    animation: modalPop 0.3s ease-out;
-}
-
-@keyframes modalPop {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.score-modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: rgba(255,255,255,0.1);
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: white;
-}
-
-.score-modal-icon {
-    font-size: 4rem;
-    margin-bottom: 8px;
-}
-
-.score-modal h2 {
-    color: #ffd700;
-    font-size: 1.8rem;
-    margin-bottom: 16px;
-}
-
-.score-modal-points {
-    background: rgba(0,0,0,0.4);
-    border-radius: 24px;
-    padding: 20px;
-    margin-bottom: 24px;
-}
-
-.points-label {
-    display: block;
-    font-size: 0.8rem;
-    color: #8b92b0;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-}
-
-.points-value {
-    display: block;
-    font-size: 3rem;
-    font-weight: 800;
-    color: #ffd700;
-    text-shadow: 0 0 10px rgba(255,215,0,0.3);
-}
-
-.share-buttons {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-}
-
-.share-btn {
-    padding: 8px 16px;
-    border-radius: 40px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.85rem;
-}
-
-.share-btn.twitter {
-    background: #1DA1F2;
-    color: white;
-}
-
-.share-btn.facebook {
-    background: #4267B2;
-    color: white;
-}
-
-.share-btn.copy {
-    background: rgba(255,215,0,0.2);
-    border: 1px solid #ffd700;
-    color: #ffd700;
-}
-
-.share-btn:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.05);
-}
-
-.score-modal-playagain {
-    background: linear-gradient(135deg, #ffd700, #ffaa00);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 40px;
-    font-weight: 700;
-    font-size: 1rem;
-    color: #1a1a1a;
-    cursor: pointer;
-    width: 100%;
-}
-
-/* ANIMATIONS */
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
 }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
     .header {
         margin: 0 12px;
@@ -1431,12 +1325,6 @@ body {
     .games-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 14px;
-    }
-    
-    .modal-container {
-        width: 95%;
-        margin: 2vh auto;
-        max-height: 90vh;
     }
     
     .features-grid {
@@ -1470,14 +1358,12 @@ body {
     }
     
     .game-ui {
-        min-height: 120px;
         flex-direction: column;
         align-items: stretch;
     }
     
     .game-stats {
         justify-content: center;
-        min-width: auto;
     }
     
     .powerup-bar {
@@ -1486,16 +1372,6 @@ body {
     
     .game-controls {
         justify-content: center;
-    }
-    
-    .powerup-btn {
-        min-width: 60px;
-        font-size: 0.65rem;
-    }
-    
-    .game-btn {
-        min-width: 80px;
-        font-size: 0.7rem;
     }
     
     .footer-content {
@@ -1523,12 +1399,6 @@ body {
         text-align: center;
     }
     
-    .btn-link {
-        display: inline-block;
-        margin-top: 8px;
-        margin-left: 0;
-    }
-    
     .banner-wrapper {
         flex-direction: column;
         align-items: center;
@@ -1551,6 +1421,40 @@ body {
         text-align: center;
         align-items: center;
     }
+    
+    .curve-progress-section {
+        margin: -10px auto 30px auto;
+        padding: 0 16px;
+    }
+    
+    .curve-container {
+        padding: 18px;
+    }
+    
+    .curve-stats-grid {
+        gap: 8px;
+    }
+    
+    .curve-stat-value {
+        font-size: 1.2rem;
+    }
+    
+    .progress-wrapper {
+        height: 28px;
+    }
+    
+    .progress-text {
+        font-size: 0.65rem;
+    }
+    
+    .curve-logo-container {
+        width: 20px !important;
+        height: 20px !important;
+    }
+    
+    .curve-header h3 {
+        font-size: 0.85rem !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1571,30 +1475,6 @@ body {
         font-size: 0.9rem;
     }
     
-    .game-frame {
-        min-height: 480px;
-    }
-    
-    .powerup-btn {
-        min-width: 55px;
-        font-size: 0.6rem;
-        padding: 4px 8px;
-    }
-    
-    .game-btn {
-        min-width: 70px;
-        font-size: 0.65rem;
-        padding: 6px 10px;
-    }
-    
-    .stat-value {
-        font-size: 1rem;
-    }
-    
-    .stat-label {
-        font-size: 0.6rem;
-    }
-    
     .hero-platform-card {
         flex-direction: column;
         text-align: center;
@@ -1603,4 +1483,667 @@ body {
     .platform-icon {
         width: auto;
     }
+}
+
+/* Dodaj na koniec style.css */
+
+.curve-stats-btn {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 0, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    padding: 8px 16px;
+    border-radius: 40px;
+    color: #ffd700;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.curve-stats-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.2));
+    border-color: #ffd700;
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    font-size: 1rem;
+}
+
+.curve-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: none;
+}
+
+.curve-modal.active {
+    display: block;
+}
+
+.curve-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(12px);
+}
+
+.curve-modal-container {
+    position: relative;
+    width: 90%;
+    max-width: 550px;
+    margin: 10vh auto;
+    background: linear-gradient(135deg, rgba(10, 20, 40, 0.98), rgba(0, 0, 0, 0.95));
+    backdrop-filter: blur(12px);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.curve-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.curve-modal-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.curve-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.curve-modal-body {
+    padding: 24px;
+}
+
+.curve-title-with-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.curve-logo-container {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    padding: 2px;
+    flex-shrink: 0;
+}
+
+.curve-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.curve-title-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.curve-title-text h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffd700;
+}
+
+.curve-subtitle {
+    font-size: 0.65rem;
+    color: #8b92b0;
+}
+
+.curve-stats-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.curve-stat-card {
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+}
+
+.curve-stat-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.curve-stat-label {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-top: 6px;
+}
+
+.progress-wrapper {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 60px;
+    height: 32px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    background: linear-gradient(90deg, #ffd700, #ff8c00, #ff6b6b);
+    height: 100%;
+    border-radius: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+}
+
+.progress-text {
+    color: #000;
+    font-weight: 800;
+    font-size: 0.75rem;
+}
+
+.curve-message {
+    text-align: center;
+    margin: 12px 0;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    border-radius: 20px;
+}
+
+.curve-message.info {
+    background: rgba(0, 198, 255, 0.08);
+    color: #00c6ff;
+}
+
+.curve-message.success {
+    background: rgba(0, 255, 136, 0.08);
+    color: #00ff88;
+}
+
+.curve-status-badge {
+    padding: 5px 14px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: rgba(0, 198, 255, 0.15);
+    color: #00c6ff;
+    border: 1px solid rgba(0, 198, 255, 0.3);
+    text-transform: uppercase;
+}
+
+.curve-status-badge.completed {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+    border-color: rgba(0, 255, 136, 0.4);
+    animation: pulse 1.8s infinite;
+}
+
+.curve-status-badge.migrated {
+    background: rgba(255, 165, 0, 0.15);
+    color: #ffa500;
+    border-color: rgba(255, 165, 0, 0.4);
+}
+
+.curve-target-info {
+    text-align: center;
+    font-size: 0.7rem;
+    opacity: 0.5;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.curve-buy-link {
+    text-align: center;
+    margin-top: 14px;
+}
+
+.curve-buy-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 0, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    padding: 6px 18px;
+    border-radius: 40px;
+    color: #ffd700;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.curve-buy-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.2));
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .curve-modal-container {
+        width: 95%;
+        margin: 5vh auto;
+    }
+    
+    .curve-modal-header {
+        padding: 16px 20px;
+    }
+    
+    .curve-modal-body {
+        padding: 20px;
+    }
+    
+    .curve-logo-container {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .curve-title-text h3 {
+        font-size: 0.9rem;
+    }
+    
+    .curve-subtitle {
+        font-size: 0.55rem;
+    }
+    
+    .curve-stat-value {
+        font-size: 1.2rem;
+    }
+    
+    .progress-wrapper {
+        height: 28px;
+    }
+    
+    .progress-text {
+        font-size: 0.65rem;
+    }
+}
+
+/* CURVE MODAL STYLES */
+.curve-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: none;
+}
+
+.curve-modal.active {
+    display: block;
+}
+
+.curve-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(12px);
+}
+
+.curve-modal-container {
+    position: relative;
+    width: 90%;
+    max-width: 550px;
+    margin: 10vh auto;
+    background: linear-gradient(135deg, rgba(10, 20, 40, 0.98), rgba(0, 0, 0, 0.95));
+    backdrop-filter: blur(12px);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.curve-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.curve-modal-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.curve-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.curve-modal-body {
+    padding: 24px;
+}
+
+.curve-title-with-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.curve-logo-container {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    padding: 2px;
+    flex-shrink: 0;
+}
+
+.curve-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.curve-title-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.curve-title-text h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffd700;
+}
+
+.curve-subtitle {
+    font-size: 0.65rem;
+    color: #8b92b0;
+}
+
+.curve-stats-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.curve-stat-card {
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+}
+
+.curve-stat-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.curve-stat-label {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-top: 6px;
+}
+
+.progress-wrapper {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 60px;
+    height: 32px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    background: linear-gradient(90deg, #ffd700, #ff8c00, #ff6b6b);
+    height: 100%;
+    border-radius: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+}
+
+.progress-text {
+    color: #000;
+    font-weight: 800;
+    font-size: 0.75rem;
+}
+
+.curve-message {
+    text-align: center;
+    margin: 12px 0;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    border-radius: 20px;
+}
+
+.curve-message.info {
+    background: rgba(0, 198, 255, 0.08);
+    color: #00c6ff;
+}
+
+.curve-message.success {
+    background: rgba(0, 255, 136, 0.08);
+    color: #00ff88;
+}
+
+.curve-message.warning {
+    background: rgba(255, 165, 0, 0.08);
+    color: #ffa500;
+}
+
+.curve-status-badge {
+    padding: 5px 14px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: rgba(0, 198, 255, 0.15);
+    color: #00c6ff;
+    border: 1px solid rgba(0, 198, 255, 0.3);
+    text-transform: uppercase;
+}
+
+.curve-status-badge.completed {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+    border-color: rgba(0, 255, 136, 0.4);
+    animation: pulse 1.8s infinite;
+}
+
+.curve-status-badge.migrated {
+    background: rgba(255, 165, 0, 0.15);
+    color: #ffa500;
+    border-color: rgba(255, 165, 0, 0.4);
+}
+
+.curve-target-info {
+    text-align: center;
+    font-size: 0.7rem;
+    opacity: 0.5;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.curve-buy-link {
+    text-align: center;
+    margin-top: 14px;
+}
+
+.curve-buy-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 0, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    padding: 6px 18px;
+    border-radius: 40px;
+    color: #ffd700;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.curve-buy-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.2));
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Przycisk w headerze */
+.curve-stats-btn {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 0, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    padding: 8px 16px;
+    border-radius: 40px;
+    color: #ffd700;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.curve-stats-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.2));
+    border-color: #ffd700;
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .curve-modal-container {
+        width: 95%;
+        margin: 5vh auto;
+    }
+    
+    .curve-modal-header {
+        padding: 16px 20px;
+    }
+    
+    .curve-modal-body {
+        padding: 20px;
+    }
+    
+    .curve-logo-container {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .curve-title-text h3 {
+        font-size: 0.9rem;
+    }
+    
+    .curve-subtitle {
+        font-size: 0.55rem;
+    }
+    
+    .curve-stat-value {
+        font-size: 1.2rem;
+    }
+    
+    .progress-wrapper {
+        height: 28px;
+    }
+    
+    .progress-text {
+        font-size: 0.65rem;
+    }
+    
+    .curve-stats-btn {
+        padding: 6px 12px;
+        font-size: 0.7rem;
+    }
+    
+    .btn-icon {
+        font-size: 0.8rem;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
 }

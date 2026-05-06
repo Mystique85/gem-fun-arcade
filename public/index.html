@@ -501,6 +501,60 @@
         </div>
     </div>
 
+    <!-- BONDING CURVE MODAL -->
+    <div id="curveModal" class="curve-modal" style="display: none;">
+        <div class="curve-modal-overlay"></div>
+        <div class="curve-modal-container">
+            <div class="curve-modal-header">
+                <div class="curve-title-with-logo">
+                    <div id="curveLogo" class="curve-logo-container">
+                        <img src="/Awesome.jpg" alt="GEM FUN" class="curve-logo-img">
+                    </div>
+                    <div class="curve-title-text">
+                        <h3>GEM FUN</h3>
+                        <span class="curve-subtitle">Bonding Curve Progress</span>
+                    </div>
+                </div>
+                <button class="curve-modal-close" id="closeCurveModalBtn">✕</button>
+            </div>
+            
+            <div class="curve-modal-body">
+                <div class="curve-stats-grid">
+                    <div class="curve-stat-card">
+                        <div class="curve-stat-value" id="soldAmount">0</div>
+                        <div class="curve-stat-label">Tokens Sold</div>
+                    </div>
+                    <div class="curve-stat-card">
+                        <div class="curve-stat-value" id="curvePercent">0%</div>
+                        <div class="curve-stat-label">Completion</div>
+                    </div>
+                    <div class="curve-stat-card">
+                        <div class="curve-stat-value" id="remainingAmount">0</div>
+                        <div class="curve-stat-label">Remaining</div>
+                    </div>
+                </div>
+                
+                <div class="progress-wrapper">
+                    <div class="progress-bar-fill" id="curveProgressFill">
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+                
+                <div class="curve-message" id="curveMessage"></div>
+                
+                <div class="curve-target-info">
+                    🎯 Target: <strong>300,000,000 GEM</strong> → Unlock Uniswap V3 Migration
+                </div>
+                
+                <div class="curve-buy-link">
+                    <a href="https://hashcoin.farm/gem" target="_blank" class="curve-buy-btn">
+                        🛒 Buy GEM FUN on HashCoin Farm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
     <script src="config.js"></script>
     <script src="components/header.js"></script>
@@ -510,5 +564,7 @@
     <script src="games/flappy.js"></script>
     <script src="games/tetris.js"></script>
     <script src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <script src="curve-progress.js"></script>
 </body>
 </html>
