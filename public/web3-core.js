@@ -1,4 +1,3 @@
-// web3-core.js
 if (typeof window.web3Initialized === 'undefined') {
     window.web3Initialized = true;
 
@@ -52,6 +51,13 @@ if (typeof window.web3Initialized === 'undefined') {
         if (window.onBalanceUpdateForGames) {
             window.onBalanceUpdateForGames(userGemBalance);
         }
+        
+        if (window.toggleLeaderboardForLoggedIn) {
+            window.toggleLeaderboardForLoggedIn();
+        }
+        if (window.toggleBannerSection) {
+            window.toggleBannerSection();
+        }
     }
 
     function disconnectWallet() {
@@ -62,13 +68,18 @@ if (typeof window.web3Initialized === 'undefined') {
         
         updateHeaderUI();
         
-        window.spendGem = async (amount, purpose = 'game') => {
-            return false;
-        };
+        window.spendGem = async () => false;
         window.gemBalance = 0;
         
         if (window.refreshGameAfterWallet) window.refreshGameAfterWallet();
         attachWalletEvents();
+        
+        if (window.toggleLeaderboardForLoggedIn) {
+            window.toggleLeaderboardForLoggedIn();
+        }
+        if (window.toggleBannerSection) {
+            window.toggleBannerSection();
+        }
     }
 
     async function refreshBalance() {
@@ -97,43 +108,24 @@ if (typeof window.web3Initialized === 'undefined') {
     }
 
     async function checkMinimumBalance() {
-        if (!userAddress) {
-            return false;
-        }
-        if (userGemBalance < MIN_GEM_REQUIRED) {
-            return false;
-        }
-        return true;
+        if (!userAddress) return false;
+        return userGemBalance >= MIN_GEM_REQUIRED;
     }
 
-    async function spendGem(amount, purpose = 'game') {
-        if (!userAddress || !tokenContract) {
-            return false;
-        }
-        
+    async function spendGem(amount) {
+        if (!userAddress || !tokenContract) return false;
         const hasMinimum = await checkMinimumBalance();
-        if (!hasMinimum) {
-            return false;
-        }
-        
-        if (!tradingEnabled) {
-            return false;
-        }
-        
-        if (userGemBalance < amount) {
-            return false;
-        }
-        
+        if (!hasMinimum) return false;
+        if (!tradingEnabled) return false;
+        if (userGemBalance < amount) return false;
         try {
             const amountWei = web3.utils.toWei(amount.toString(), 'ether');
-            const tx = await tokenContract.methods.transfer(GAME_WALLET_ADDRESS, amountWei).send({
+            await tokenContract.methods.transfer(GAME_WALLET_ADDRESS, amountWei).send({
                 from: userAddress,
                 gas: 100000
             });
-            
             await refreshBalance();
             return true;
-            
         } catch (err) {
             return false;
         }
@@ -146,9 +138,7 @@ if (typeof window.web3Initialized === 'undefined') {
                     method: 'eth_requestAccounts'
                 });
                 
-                if (!accounts || accounts.length === 0) {
-                    throw new Error('No accounts returned');
-                }
+                if (!accounts || accounts.length === 0) throw new Error('No accounts returned');
                 
                 userAddress = accounts[0];
                 web3 = new Web3(window.ethereum);
@@ -204,7 +194,6 @@ if (typeof window.web3Initialized === 'undefined') {
             try {
                 const accounts = await window.ethereum.request({ method: 'eth_accounts' });
                 if (accounts && accounts.length > 0) {
-                    console.log('🟡 Restoring previous wallet connection...');
                     userAddress = accounts[0];
                     web3 = new Web3(window.ethereum);
                     window.web3 = web3;
@@ -231,18 +220,12 @@ if (typeof window.web3Initialized === 'undefined') {
                     
                     if (window.onWalletConnect) window.onWalletConnect(userAddress);
                     attachWalletEvents();
-                    
-                    console.log('✅ Previous connection restored');
                 }
-            } catch (err) {
-                console.log('No previous connection to restore');
-            }
+            } catch (err) {}
         }
     }
 
-    window.spendGem = async (amount, purpose) => {
-        return false;
-    };
+    window.spendGem = async () => false;
     window.gemBalance = 0;
     window.userAddress = null;
 

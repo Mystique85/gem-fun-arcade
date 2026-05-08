@@ -1,6 +1,3 @@
-// curve-progress.js
-console.log('🔵 curve-progress.js LOADED');
-
 const FACTORY_ADDRESS = '0x25064346f8E910Ea710d93e15a0E24d0233e60F2';
 const CURVE_TARGET = 300000000;
 
@@ -14,18 +11,9 @@ function formatNumber(num) {
 }
 
 async function updateCurveProgressUI() {
-    console.log('📊 updateCurveProgressUI called');
-    
     const section = document.getElementById('curveModal');
-    if (!section) {
-        console.log('❌ Modal not found');
-        return;
-    }
-    
-    if (!window.userAddress) {
-        return;
-    }
-    
+    if (!section) return;
+    if (!window.userAddress) return;
     if (!window.web3) return;
     
     try {
@@ -62,16 +50,10 @@ async function updateCurveProgressUI() {
             messageDiv.className = 'curve-message info';
             messageDiv.innerHTML = `⏳ Need ${(100 - percentage).toFixed(1)}% more to unlock migration`;
         }
-        
-        console.log(`✅ Curve: ${formatNumber(sold)} / 300M (${percentage.toFixed(1)}%)`);
-    } catch (err) {
-        console.error('Error:', err);
-    }
+    } catch (err) {}
 }
 
-// Obsługa modala
 document.addEventListener('DOMContentLoaded', function() {
-    // Nasłuchuj na przycisk w headerze
     document.addEventListener('click', function(e) {
         if (e.target.closest('#curveStatsBtn')) {
             e.preventDefault();
@@ -92,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Odświeżanie co 30 sekund gdy modal otwarty
     setInterval(function() {
         const modal = document.getElementById('curveModal');
         if (modal && modal.style.display === 'block') {

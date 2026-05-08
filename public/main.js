@@ -16,12 +16,13 @@ const GAMES = [
 function toggleBannerSection() {
     const bannerSection = document.querySelector('.banner-section');
     if (!bannerSection) return;
-    
-    if (!window.userAddress) {
-        bannerSection.style.display = 'block';
-    } else {
-        bannerSection.style.display = 'none';
-    }
+    bannerSection.style.display = !window.userAddress ? 'block' : 'none';
+}
+
+function toggleLeaderboardForLoggedIn() {
+    const leaderboardSection = document.getElementById('leaderboardSection');
+    if (!leaderboardSection) return;
+    leaderboardSection.style.display = window.userAddress ? 'block' : 'none';
 }
 
 function updateRequirementMessage(balance) {
@@ -100,7 +101,6 @@ function updateRequirementMessage(balance) {
         if (tokenEcosystem) tokenEcosystem.style.display = 'none';
         requirementMsg.style.display = 'none';
     }
-    
     toggleBannerSection();
 }
 
@@ -140,43 +140,28 @@ function renderGamesGrid() {
             const gameId = card.dataset.game;
             const game = GAMES.find(g => g.id === gameId);
             if (game) {
-                if (game.badge === 'coming') {
+                if (game.badge === 'coming') return;
+                if (!window.userAddress) {
+                    const requirementMsg = document.querySelector('.gem-requirement');
+                    if (requirementMsg) {
+                        requirementMsg.style.animation = 'pulse 0.5s ease';
+                        setTimeout(() => { requirementMsg.style.animation = ''; }, 500);
+                    }
                     return;
-                } else {
-                    if (!window.userAddress) {
-                        const requirementMsg = document.querySelector('.gem-requirement');
-                        if (requirementMsg) {
-                            requirementMsg.style.animation = 'pulse 0.5s ease';
-                            setTimeout(() => {
-                                requirementMsg.style.animation = '';
-                            }, 500);
-                        }
-                        return;
-                    }
-                    
-                    let currentBalance = window.gemBalance;
-                    if (window.refreshBalance) {
-                        currentBalance = await window.refreshBalance();
-                    }
-                    
-                    const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
-                    
-                    if (currentBalance < minRequired) {
-                        updateRequirementMessage(currentBalance);
-                        const requirementMsg = document.querySelector('.gem-requirement');
-                        if (requirementMsg) {
-                            requirementMsg.style.animation = 'pulse 0.5s ease';
-                            setTimeout(() => {
-                                requirementMsg.style.animation = '';
-                            }, 500);
-                        }
-                        return;
-                    }
-                    
-                    if (window.openGameModal) {
-                        window.openGameModal(gameId, game.name, game);
-                    }
                 }
+                let currentBalance = window.gemBalance;
+                if (window.refreshBalance) currentBalance = await window.refreshBalance();
+                const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
+                if (currentBalance < minRequired) {
+                    updateRequirementMessage(currentBalance);
+                    const requirementMsg = document.querySelector('.gem-requirement');
+                    if (requirementMsg) {
+                        requirementMsg.style.animation = 'pulse 0.5s ease';
+                        setTimeout(() => { requirementMsg.style.animation = ''; }, 500);
+                    }
+                    return;
+                }
+                if (window.openGameModal) window.openGameModal(gameId, game.name, game);
             }
         };
     });
@@ -186,34 +171,13 @@ function updateLeaderboard(filter = 'all') {
     const leaderboardList = document.getElementById('leaderboardList');
     if (!leaderboardList) return;
     
-    let allScores = [];
-    
-    if (filter === 'all') {
-        GAMES.forEach(game => {
-            const scores = JSON.parse(localStorage.getItem(`${game.id}_ranking`) || '[]');
-            allScores.push(...scores.map(s => ({ ...s, game: game.name, gameIcon: game.icon })));
-        });
-        allScores.sort((a, b) => b.score - a.score);
-        allScores = allScores.slice(0, 20);
-    } else {
-        const scores = JSON.parse(localStorage.getItem(`${filter}_ranking`) || '[]');
-        allScores = scores.slice(0, 10);
-    }
-    
-    if (allScores.length === 0) {
-        leaderboardList.innerHTML = '<div class="loading-scores">No scores yet. Play a game!</div>';
-        return;
-    }
-    
-    leaderboardList.innerHTML = allScores.map((entry, index) => `
-        <div class="leaderboard-item">
-            <div class="leaderboard-rank">${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}</div>
-            <div class="leaderboard-player">
-                ${entry.gameIcon || '🎮'} ${entry.address || 'Player'}${filter === 'all' ? ` - ${entry.game || ''}` : ''}
-            </div>
-            <div class="leaderboard-score">${entry.score} pts</div>
+    leaderboardList.innerHTML = `
+        <div class="coming-soon-message" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 2rem; margin-bottom: 12px;">🏗️</div>
+            <div style="font-weight: 600; margin-bottom: 8px; color: #ffd700;">Rankings Coming Soon!</div>
+            <div style="font-size: 0.8rem; opacity: 0.7; color: #8b92b0;">Leaderboards will be available after the official launch. Stay tuned!</div>
         </div>
-    `).join('');
+    `;
 }
 
 function setupLeaderboardFilters() {
@@ -228,14 +192,11 @@ function setupLeaderboardFilters() {
 }
 
 function initHeader() {
-    const headerContainer = document.getElementById('mainHeader');
-    if (headerContainer && window.HeaderComponent) {
+    const headerInner = document.querySelector('#mainHeader .header-inner');
+    if (headerInner && window.HeaderComponent) {
         headerComponent = new window.HeaderComponent();
-        headerContainer.innerHTML = headerComponent.getHTML();
-        
-        if (window.setHeaderComponent) {
-            window.setHeaderComponent(headerComponent);
-        }
+        headerInner.innerHTML = headerComponent.getHTML();
+        if (window.setHeaderComponent) window.setHeaderComponent(headerComponent);
     }
 }
 
@@ -244,7 +205,7 @@ function initApp() {
     renderGamesGrid();
     setupLeaderboardFilters();
     updateLeaderboard('all');
-    
+    toggleLeaderboardForLoggedIn();
     setTimeout(() => {
         const balance = window.gemBalance || 0;
         updateRequirementMessage(balance);
@@ -253,20 +214,18 @@ function initApp() {
 
 window.onWalletConnect = (address) => {
     updateLeaderboard('all');
+    toggleLeaderboardForLoggedIn();
     if (window.refreshBalance) {
-        window.refreshBalance().then(balance => {
-            updateRequirementMessage(balance);
-        });
+        window.refreshBalance().then(balance => updateRequirementMessage(balance));
     }
     toggleBannerSection();
 };
 
 window.onAccountChange = (address) => {
     updateLeaderboard('all');
+    toggleLeaderboardForLoggedIn();
     if (window.refreshBalance) {
-        window.refreshBalance().then(balance => {
-            updateRequirementMessage(balance);
-        });
+        window.refreshBalance().then(balance => updateRequirementMessage(balance));
     }
     toggleBannerSection();
 };
@@ -286,23 +245,16 @@ if (document.readyState === 'loading') {
 document.addEventListener('DOMContentLoaded', () => {
     const ctaBtn = document.getElementById('finalCtaBtn');
     const heroCtaBtn = document.getElementById('heroCtaBtn');
-    
     const handleConnect = () => {
         if (!window.userAddress) {
-            if (window.connectWallet) {
-                window.connectWallet();
-            } else {
-                const connectBtn = document.getElementById('connectWalletBtn');
-                if (connectBtn) connectBtn.click();
-            }
+            if (window.connectWallet) window.connectWallet();
+            else document.getElementById('connectWalletBtn')?.click();
         } else {
             document.querySelector('.games-section')?.scrollIntoView({ behavior: 'smooth' });
         }
     };
-    
     if (ctaBtn) ctaBtn.onclick = handleConnect;
     if (heroCtaBtn) heroCtaBtn.onclick = handleConnect;
-    
     toggleBannerSection();
 });
 
@@ -321,63 +273,44 @@ if (typeof window.web3Initialized === 'undefined') {
     window.setHeaderComponent = (component) => {
         headerComponent = component;
         updateHeaderUI();
-        setTimeout(() => {
-            attachWalletEvents();
-        }, 100);
+        setTimeout(() => attachWalletEvents(), 100);
     };
 
     function attachWalletEvents() {
         const connectBtn = document.getElementById('connectWalletBtn');
         const disconnectBtn = document.getElementById('disconnectWalletBtn');
-        
         if (connectBtn) {
             const newConnectBtn = connectBtn.cloneNode(true);
             connectBtn.parentNode.replaceChild(newConnectBtn, connectBtn);
-            newConnectBtn.onclick = (e) => {
-                e.preventDefault();
-                connectWallet();
-            };
+            newConnectBtn.onclick = (e) => { e.preventDefault(); connectWallet(); };
         }
-        
         if (disconnectBtn) {
             const newDisconnectBtn = disconnectBtn.cloneNode(true);
             disconnectBtn.parentNode.replaceChild(newDisconnectBtn, disconnectBtn);
-            newDisconnectBtn.onclick = (e) => {
-                e.preventDefault();
-                disconnectWallet();
-            };
+            newDisconnectBtn.onclick = (e) => { e.preventDefault(); disconnectWallet(); };
         }
     }
 
     function updateHeaderUI() {
-        if (headerComponent) {
-            headerComponent.updateWalletUI(userAddress, userGemBalance, tradingEnabled);
-        }
+        if (headerComponent) headerComponent.updateWalletUI(userAddress, userGemBalance, tradingEnabled);
         window.userAddress = userAddress;
         window.gemBalance = userGemBalance;
-        
-        if (window.onBalanceUpdateForGames) {
-            window.onBalanceUpdateForGames(userGemBalance);
-        }
-        
+        if (window.onBalanceUpdateForGames) window.onBalanceUpdateForGames(userGemBalance);
         toggleBannerSection();
+        toggleLeaderboardForLoggedIn();
     }
 
     function disconnectWallet() {
         userAddress = null;
         tokenContract = null;
         web3 = null;
-        
         updateHeaderUI();
-        
-        window.spendGem = async (amount, purpose = 'game') => {
-            return false;
-        };
+        window.spendGem = async () => false;
         window.gemBalance = 0;
-        
         if (window.refreshGameAfterWallet) window.refreshGameAfterWallet();
         attachWalletEvents();
         toggleBannerSection();
+        toggleLeaderboardForLoggedIn();
     }
 
     async function refreshBalance() {
@@ -406,43 +339,21 @@ if (typeof window.web3Initialized === 'undefined') {
     }
 
     async function checkMinimumBalance() {
-        if (!userAddress) {
-            return false;
-        }
-        if (userGemBalance < MIN_GEM_REQUIRED) {
-            return false;
-        }
-        return true;
+        if (!userAddress) return false;
+        return userGemBalance >= MIN_GEM_REQUIRED;
     }
 
-    async function spendGem(amount, purpose = 'game') {
-        if (!userAddress || !tokenContract) {
-            return false;
-        }
-        
+    async function spendGem(amount) {
+        if (!userAddress || !tokenContract) return false;
         const hasMinimum = await checkMinimumBalance();
-        if (!hasMinimum) {
-            return false;
-        }
-        
-        if (!tradingEnabled) {
-            return false;
-        }
-        
-        if (userGemBalance < amount) {
-            return false;
-        }
-        
+        if (!hasMinimum) return false;
+        if (!tradingEnabled) return false;
+        if (userGemBalance < amount) return false;
         try {
             const amountWei = web3.utils.toWei(amount.toString(), 'ether');
-            const tx = await tokenContract.methods.transfer(GAME_WALLET_ADDRESS, amountWei).send({
-                from: userAddress,
-                gas: 100000
-            });
-            
+            await tokenContract.methods.transfer(GAME_WALLET_ADDRESS, amountWei).send({ from: userAddress, gas: 100000 });
             await refreshBalance();
             return true;
-            
         } catch (err) {
             return false;
         }
@@ -451,37 +362,22 @@ if (typeof window.web3Initialized === 'undefined') {
     async function connectWallet() {
         if (typeof window.ethereum !== 'undefined') {
             try {
-                const accounts = await window.ethereum.request({ 
-                    method: 'eth_requestAccounts'
-                });
-                
-                if (!accounts || accounts.length === 0) {
-                    throw new Error('No accounts returned');
-                }
-                
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                if (!accounts || accounts.length === 0) throw new Error('No accounts returned');
                 userAddress = accounts[0];
                 web3 = new Web3(window.ethereum);
-                
                 const chainId = await web3.eth.getChainId();
                 if (chainId !== 8453) {
                     try {
-                        await window.ethereum.request({
-                            method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: '0x2105' }]
-                        });
+                        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
                     } catch (e) {}
                 }
-                
                 tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-                
                 await checkTradingStatus();
                 await refreshBalance();
-                
                 updateHeaderUI();
-                
                 window.spendGem = spendGem;
                 window.refreshBalance = refreshBalance;
-                
                 window.ethereum.on('accountsChanged', async (newAccounts) => {
                     if (newAccounts && newAccounts.length > 0) {
                         userAddress = newAccounts[0];
@@ -490,21 +386,23 @@ if (typeof window.web3Initialized === 'undefined') {
                         updateHeaderUI();
                         if (window.onAccountChange) window.onAccountChange(userAddress);
                         toggleBannerSection();
+                        toggleLeaderboardForLoggedIn();
                     } else {
                         disconnectWallet();
                         if (window.onAccountChange) window.onAccountChange(null);
                         toggleBannerSection();
+                        toggleLeaderboardForLoggedIn();
                     }
                 });
-                
                 if (window.onWalletConnect) window.onWalletConnect(userAddress);
                 attachWalletEvents();
                 toggleBannerSection();
-                
+                toggleLeaderboardForLoggedIn();
             } catch (err) {
                 userAddress = null;
                 updateHeaderUI();
                 toggleBannerSection();
+                toggleLeaderboardForLoggedIn();
             }
         } else {
             window.open('https://metamask.io/', '_blank');
@@ -518,47 +416,39 @@ if (typeof window.web3Initialized === 'undefined') {
                 if (accounts && accounts.length > 0) {
                     userAddress = accounts[0];
                     web3 = new Web3(window.ethereum);
-                    
                     const chainId = await web3.eth.getChainId();
                     if (chainId !== 8453) {
                         try {
-                            await window.ethereum.request({
-                                method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: '0x2105' }]
-                            });
+                            await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
                         } catch (e) {}
                     }
-                    
                     tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-                    
                     await checkTradingStatus();
                     await refreshBalance();
-                    
                     updateHeaderUI();
-                    
                     window.spendGem = spendGem;
                     window.refreshBalance = refreshBalance;
-                    
                     if (window.onWalletConnect) window.onWalletConnect(userAddress);
                     attachWalletEvents();
                     toggleBannerSection();
+                    toggleLeaderboardForLoggedIn();
                 } else {
                     toggleBannerSection();
+                    toggleLeaderboardForLoggedIn();
                 }
             } catch (err) {
                 toggleBannerSection();
+                toggleLeaderboardForLoggedIn();
             }
         } else {
             toggleBannerSection();
+            toggleLeaderboardForLoggedIn();
         }
     }
 
-    window.spendGem = async (amount, purpose) => {
-        return false;
-    };
+    window.spendGem = async () => false;
     window.gemBalance = 0;
     window.userAddress = null;
-
     window.connectWallet = connectWallet;
     window.disconnectWallet = disconnectWallet;
     window.getMinGemRequired = () => MIN_GEM_REQUIRED;
@@ -574,7 +464,5 @@ if (typeof window.web3Initialized === 'undefined') {
         }
     };
 
-    setTimeout(() => {
-        restoreConnection();
-    }, 500);
+    setTimeout(() => restoreConnection(), 500);
 }
