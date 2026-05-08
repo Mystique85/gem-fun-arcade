@@ -200,12 +200,70 @@ function initHeader() {
     }
 }
 
+function initProfileDropdown() {
+    const profileBtn = document.getElementById('userProfileBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const copyBtn = document.getElementById('dropdownCopyBtn');
+    const disconnectBtn = document.getElementById('disconnectFromDropdownBtn');
+
+    if (profileBtn) {
+        profileBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (dropdownMenu) {
+                const isVisible = dropdownMenu.style.display === 'block';
+                dropdownMenu.style.display = isVisible ? 'none' : 'block';
+            }
+        };
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.profile-dropdown') && dropdownMenu) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
+
+    if (copyBtn) {
+        copyBtn.onclick = () => {
+            const address = document.getElementById('dropdownAddressValue')?.innerText;
+            if (address) {
+                navigator.clipboard.writeText(address).then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '✅';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                    }, 2000);
+                });
+            }
+        };
+    }
+
+    if (disconnectBtn) {
+        disconnectBtn.onclick = () => {
+            if (dropdownMenu) dropdownMenu.style.display = 'none';
+            if (window.disconnectWallet) window.disconnectWallet();
+        };
+    }
+}
+
+function updateDropdownData() {
+    if (window.userAddress) {
+        const dropdownAddressValue = document.getElementById('dropdownAddressValue');
+        const dropdownBalanceValue = document.getElementById('dropdownBalanceValue');
+        if (dropdownAddressValue) dropdownAddressValue.innerText = window.userAddress;
+        if (dropdownBalanceValue && window.gemBalance !== undefined) {
+            const headerComponent = new window.HeaderComponent();
+            dropdownBalanceValue.innerText = headerComponent.formatBalance(window.gemBalance) + ' GEM';
+        }
+    }
+}
+
 function initApp() {
     initHeader();
     renderGamesGrid();
     setupLeaderboardFilters();
     updateLeaderboard('all');
     toggleLeaderboardForLoggedIn();
+    initProfileDropdown();
     setTimeout(() => {
         const balance = window.gemBalance || 0;
         updateRequirementMessage(balance);
@@ -219,6 +277,7 @@ window.onWalletConnect = (address) => {
         window.refreshBalance().then(balance => updateRequirementMessage(balance));
     }
     toggleBannerSection();
+    updateDropdownData();
 };
 
 window.onAccountChange = (address) => {
@@ -228,6 +287,7 @@ window.onAccountChange = (address) => {
         window.refreshBalance().then(balance => updateRequirementMessage(balance));
     }
     toggleBannerSection();
+    updateDropdownData();
 };
 
 window.onBalanceUpdateForGames = (balance) => {
@@ -278,16 +338,10 @@ if (typeof window.web3Initialized === 'undefined') {
 
     function attachWalletEvents() {
         const connectBtn = document.getElementById('connectWalletBtn');
-        const disconnectBtn = document.getElementById('disconnectWalletBtn');
         if (connectBtn) {
             const newConnectBtn = connectBtn.cloneNode(true);
             connectBtn.parentNode.replaceChild(newConnectBtn, connectBtn);
             newConnectBtn.onclick = (e) => { e.preventDefault(); connectWallet(); };
-        }
-        if (disconnectBtn) {
-            const newDisconnectBtn = disconnectBtn.cloneNode(true);
-            disconnectBtn.parentNode.replaceChild(newDisconnectBtn, disconnectBtn);
-            newDisconnectBtn.onclick = (e) => { e.preventDefault(); disconnectWallet(); };
         }
     }
 
@@ -298,6 +352,7 @@ if (typeof window.web3Initialized === 'undefined') {
         if (window.onBalanceUpdateForGames) window.onBalanceUpdateForGames(userGemBalance);
         toggleBannerSection();
         toggleLeaderboardForLoggedIn();
+        updateDropdownData();
     }
 
     function disconnectWallet() {
