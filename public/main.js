@@ -366,6 +366,8 @@ if (typeof window.web3Initialized === 'undefined') {
         attachWalletEvents();
         toggleBannerSection();
         toggleLeaderboardForLoggedIn();
+        
+        location.reload();
     }
 
     async function refreshBalance() {

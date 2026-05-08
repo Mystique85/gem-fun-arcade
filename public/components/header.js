@@ -66,14 +66,14 @@ class HeaderComponent {
                             <button class="dropdown-copy-btn" id="dropdownCopyBtn">📋</button>
                         </div>
                         <div class="dropdown-item">
-                            <i class="fas fa-gem"></i>
+                            <img src="/Awesome.jpg" alt="GEM FUN" class="dropdown-gem-icon">
                             <div class="dropdown-item-content">
                                 <div class="dropdown-item-label">GEM FUN Balance</div>
                                 <div class="dropdown-item-value" id="dropdownBalanceValue">0 GEM</div>
                             </div>
                         </div>
                         <div class="dropdown-item">
-                            <i class="fas fa-globe"></i>
+                            <img src="/Base.jpg" alt="Base" class="dropdown-network-icon">
                             <div class="dropdown-item-content">
                                 <div class="dropdown-item-label">Network</div>
                                 <div class="dropdown-item-value">Base Network</div>
