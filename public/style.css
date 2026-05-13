@@ -130,10 +130,6 @@ body {
     box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
 }
 
-.curve-stats-btn .btn-icon {
-    font-size: 0.8rem;
-}
-
 .beta-badge {
     display: inline-flex;
     align-items: center;
@@ -176,10 +172,6 @@ body {
 .nav-connect-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
-}
-
-.nav-connect-btn i {
-    font-size: 0.7rem;
 }
 
 .user-profile-btn {
@@ -231,6 +223,10 @@ body {
     transform: rotate(180deg);
 }
 
+/* ========================================
+   DROPDOWN MENU
+   ======================================== */
+
 .profile-dropdown {
     position: relative;
 }
@@ -239,11 +235,12 @@ body {
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    width: 320px;
-    background: linear-gradient(135deg, #0f1220, #0a0c15);
+    width: 340px;
+    max-width: 90vw;
+    background: #0a0a0c;
     border: 1px solid rgba(255, 215, 0, 0.2);
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
     overflow: hidden;
     z-index: 1001;
     animation: dropdownFadeIn 0.2s ease;
@@ -260,45 +257,87 @@ body {
     }
 }
 
+/* GAMER HUB - nowy nagłówek */
 .dropdown-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px;
-    background: rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-}
-
-.dropdown-avatar {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #ffd700, #ff8c00);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    color: #0a0a0c;
+    padding: 20px 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+    position: relative;
+    overflow: hidden;
 }
 
-.dropdown-info {
-    flex: 1;
+.gamer-hub-title {
+    display: flex;
+    gap: 8px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 2;
 }
 
-.dropdown-name {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #ffd700;
+.hub-text {
+    color: #8b92b0;
+    text-shadow: none;
 }
 
-.dropdown-status {
-    font-size: 0.7rem;
-    color: #00ff88;
+.hub-text-highlight {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+}
+
+.hub-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.15), transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+    animation: hubPulse 3s ease-in-out infinite;
+}
+
+@keyframes hubPulse {
+    0%, 100% {
+        opacity: 0.5;
+        width: 120px;
+        height: 120px;
+    }
+    50% {
+        opacity: 1;
+        width: 160px;
+        height: 160px;
+    }
+}
+
+.dropdown-header::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.dropdown-header:hover::before {
+    opacity: 1;
 }
 
 .dropdown-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
     margin: 8px 0;
 }
 
@@ -306,18 +345,13 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 16px;
+    padding: 12px 20px;
     transition: background 0.2s;
+    background: transparent;
 }
 
 .dropdown-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.dropdown-item i {
-    width: 20px;
-    font-size: 1rem;
-    color: #ffd700;
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .dropdown-item-content {
@@ -338,19 +372,12 @@ body {
     word-break: break-all;
 }
 
-.dropdown-copy-btn {
-    background: rgba(255, 215, 0, 0.15);
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    padding: 4px 10px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.7rem;
-    transition: all 0.2s;
-    color: #ffd700;
-}
-
-.dropdown-copy-btn:hover {
-    background: rgba(255, 215, 0, 0.3);
+.dropdown-gem-icon,
+.dropdown-network-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .dropdown-disconnect-btn {
@@ -359,10 +386,10 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 12px;
-    background: linear-gradient(135deg, #3a1e1e, #2a1212);
+    padding: 14px;
+    background: rgba(244, 67, 54, 0.1);
     border: none;
-    border-top: 1px solid rgba(244, 67, 54, 0.3);
+    border-top: 1px solid rgba(244, 67, 54, 0.2);
     color: #ff6b6b;
     font-weight: 600;
     font-size: 0.8rem;
@@ -371,23 +398,314 @@ body {
 }
 
 .dropdown-disconnect-btn:hover {
-    background: linear-gradient(135deg, #4a2a2a, #3a1e1e);
+    background: rgba(244, 67, 54, 0.2);
     color: #ff8888;
 }
 
-.dropdown-gem-icon {
-    width: 20px;
-    height: 20px;
+.dropdown-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+}
+
+.dropdown-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+/* ========================================
+   BADGES SECTION
+   ======================================== */
+
+.dropdown-badges-section {
+    padding: 16px 20px;
+    background: transparent;
+}
+
+.dropdown-badges-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.badges-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.badges-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -30px;
+    right: -30px;
+    width: calc(100% + 60px);
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ffd700, #ff8c00, #ffd700, transparent);
+    border-radius: 2px;
+}
+
+.badges-title::before {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: #ffd700;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ffd700;
+    animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        opacity: 0.5;
+        box-shadow: 0 0 4px #ffd700;
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 12px #ffd700;
+    }
+}
+
+.dropdown-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    justify-items: center;
+    align-items: center;
+}
+
+.badge-slot {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.badge-slot:hover {
+    transform: translateY(-2px);
+}
+
+.badge-slot::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: #1a1a2a;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 10px;
+    white-space: nowrap;
+    z-index: 1002;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    pointer-events: none;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+.badge-slot::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(2px);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent #1a1a2a transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    pointer-events: none;
+    z-index: 1002;
+}
+
+.badge-slot:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-2px);
+}
+
+.badge-slot:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(4px);
+}
+
+.badge-slot:nth-child(4n+1)::after {
+    left: 0;
+    transform: translateX(0) translateY(8px);
+}
+.badge-slot:nth-child(4n+1):hover::after {
+    transform: translateX(0) translateY(4px);
+}
+.badge-slot:nth-child(4n+1)::before {
+    left: 20px;
+    transform: translateX(0) translateY(2px);
+}
+.badge-slot:nth-child(4n+1):hover::before {
+    transform: translateX(0) translateY(-2px);
+}
+
+.badge-slot:nth-child(4n+2)::after {
+    left: 0;
+    transform: translateX(0) translateY(8px);
+}
+.badge-slot:nth-child(4n+2):hover::after {
+    transform: translateX(0) translateY(4px);
+}
+.badge-slot:nth-child(4n+2)::before {
+    left: 30px;
+    transform: translateX(0) translateY(2px);
+}
+.badge-slot:nth-child(4n+2):hover::before {
+    transform: translateX(0) translateY(-2px);
+}
+
+.badge-slot:nth-child(4n+3)::after {
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+}
+.badge-slot:nth-child(4n+3):hover::after {
+    transform: translateX(-50%) translateY(4px);
+}
+.badge-slot:nth-child(4n+3)::before {
+    left: 50%;
+    transform: translateX(-50%) translateY(2px);
+}
+.badge-slot:nth-child(4n+3):hover::before {
+    transform: translateX(-50%) translateY(-2px);
+}
+
+.badge-slot:nth-child(4n+4)::after {
+    right: 0;
+    left: auto;
+    transform: translateX(0) translateY(8px);
+}
+.badge-slot:nth-child(4n+4):hover::after {
+    transform: translateX(0) translateY(4px);
+}
+.badge-slot:nth-child(4n+4)::before {
+    right: 20px;
+    left: auto;
+    transform: translateX(0) translateY(2px);
+}
+.badge-slot:nth-child(4n+4):hover::before {
+    transform: translateX(0) translateY(-2px);
+}
+
+.badge-icon {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.badge-slot:hover .badge-icon {
+    transform: scale(1.05);
+}
+
+.badge-icon-img {
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.dropdown-network-icon {
+.badge-icon-default {
+    font-size: 2.2rem;
+}
+
+.badge-slot.locked {
+    opacity: 0.5;
+    filter: grayscale(0.4);
+}
+
+.lock-overlay {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 50%;
     width: 20px;
     height: 20px;
-    border-radius: 50%;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    border: 1px solid rgba(255, 215, 0, 0.4);
 }
+
+.badge-slot.placeholder {
+    opacity: 0.6;
+}
+
+.badge-icon-placeholder {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
+    border: 1.5px dashed rgba(255, 215, 0, 0.25);
+    transition: all 0.2s ease;
+}
+
+.badge-slot.placeholder:hover .badge-icon-placeholder {
+    border-color: rgba(255, 215, 0, 0.5);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.placeholder-text {
+    font-size: 0.55rem;
+    font-weight: 600;
+    color: #8b92b0;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+}
+
+/* ========================================
+   BANNER SECTION
+   ======================================== */
 
 .banner-section {
     padding: 1.5rem 1.5rem;
@@ -548,10 +866,9 @@ body {
     color: #ffd700;
 }
 
-.link-icon {
-    font-size: 0.65rem;
-    color: #ffffff;
-}
+/* ========================================
+   TOKEN ECOSYSTEM
+   ======================================== */
 
 .token-ecosystem {
     background: rgba(18, 22, 35, 0.4);
@@ -603,31 +920,6 @@ body {
 .eco-note {
     font-size: 0.8rem;
     color: #ffaa44;
-}
-
-.highlight-gold {
-    color: #ffd700;
-    font-weight: 700;
-}
-
-.highlight-cyan {
-    color: #00c6ff;
-    font-weight: 700;
-}
-
-.highlight-base {
-    color: #0052ff;
-    font-weight: 700;
-}
-
-.btn-link {
-    color: #ffd700;
-    text-decoration: none;
-    font-size: 0.8rem;
-}
-
-.btn-link:hover {
-    text-decoration: underline;
 }
 
 .eco-steps {
@@ -722,6 +1014,10 @@ body {
     font-size: 0.75rem;
     text-align: center;
 }
+
+/* ========================================
+   WHY PLAY & OTHER SECTIONS
+   ======================================== */
 
 .why-play, .ranking-custom, .rewards, .events, .why-login, .how-it-works {
     background: rgba(18, 22, 35, 0.4);
@@ -961,6 +1257,10 @@ body {
     font-size: 0.8rem;
 }
 
+/* ========================================
+   GAMES SECTION
+   ======================================== */
+
 .games-section {
     background: rgba(18, 22, 35, 0.4);
     border-radius: 28px;
@@ -1015,6 +1315,10 @@ body {
     border-radius: 20px;
     display: inline-block;
 }
+
+/* ========================================
+   LEADERBOARD SECTION
+   ======================================== */
 
 .leaderboard-section {
     background: rgba(18, 22, 35, 0.4);
@@ -1084,6 +1388,10 @@ body {
     color: #8b92b0;
     font-size: 0.8rem;
 }
+
+/* ========================================
+   HERO PLATFORM CARD
+   ======================================== */
 
 .hero-platform-card {
     background: rgba(18, 22, 35, 0.4);
@@ -1175,6 +1483,10 @@ body {
     font-size: 0.8rem;
     font-weight: 600;
 }
+
+/* ========================================
+   FOOTER
+   ======================================== */
 
 .gem-footer {
     background: #0a0a0c;
@@ -1346,6 +1658,10 @@ body {
     text-decoration: underline;
     color: #cccccc;
 }
+
+/* ========================================
+   GAME MODAL
+   ======================================== */
 
 .game-modal {
     display: none;
@@ -1530,6 +1846,10 @@ body {
 .game-btn:hover {
     background: rgba(255,255,255,0.2);
 }
+
+/* ========================================
+   CURVE MODAL
+   ======================================== */
 
 .curve-modal {
     display: none;
@@ -1747,11 +2067,6 @@ body {
     transform: translateY(-2px);
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-}
-
 .coming-soon-message {
     text-align: center;
     padding: 40px 20px;
@@ -1777,6 +2092,10 @@ body {
     color: #8b92b0;
 }
 
+/* ========================================
+   RESPONSYWNOSC
+   ======================================== */
+
 @media (max-width: 1024px) {
     .footer-grid {
         grid-template-columns: 1.5fr 0.9fr 0.9fr 0.9fr;
@@ -1789,16 +2108,7 @@ body {
 
 @media (max-width: 768px) {
     .header-inner {
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        gap: 8px;
         padding: 0 16px;
-    }
-    
-    .logo-area {
-        flex: 1;
-        justify-content: flex-start;
     }
     
     .gem-logo {
@@ -1810,31 +2120,8 @@ body {
         font-size: 1rem;
     }
     
-    .wallet-panel {
-        flex: 0;
-        justify-content: flex-end;
-    }
-    
     .curve-stats-btn {
         display: none !important;
-    }
-    
-    .nav-connect-btn {
-        padding: 5px 12px;
-        font-size: 0.7rem;
-    }
-    
-    .user-profile-btn {
-        padding: 3px 10px 3px 6px;
-    }
-    
-    .user-avatar {
-        width: 24px;
-        height: 24px;
-    }
-    
-    .avatar-icon {
-        font-size: 0.7rem;
     }
     
     .user-address {
@@ -1847,20 +2134,40 @@ body {
     
     .content-scroll {
         padding: 100px 16px 30px 16px;
-        gap: 20px;
+    }
+    
+    .banner-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .banner-image-wrapper {
+        order: 1;
+        margin-bottom: 1.5rem;
+    }
+    
+    .banner-content {
+        order: 2;
+        text-align: center;
+        align-items: center;
+    }
+    
+    .banner-stats {
+        justify-content: center;
+    }
+    
+    .mining-hash-badge {
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .banner-title {
+        font-size: 1.2rem;
     }
     
     .games-grid {
         grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
         gap: 12px;
-    }
-    
-    .game-card-icon {
-        font-size: 1.6rem;
-    }
-    
-    .game-card h4 {
-        font-size: 0.8rem;
     }
     
     .features-grid {
@@ -1904,55 +2211,35 @@ body {
         text-align: center;
     }
     
-    .banner-wrapper {
-        flex-direction: column;
-        align-items: center;
+    .footer-grid {
+        grid-template-columns: 1fr !important;
     }
     
-    .banner-stats {
-        justify-content: center;
+    .footer-column {
+        display: none !important;
     }
     
-    .banner-title {
-        font-size: 1.2rem;
+    .footer-main {
+        display: flex !important;
+        text-align: center !important;
+        align-items: center !important;
     }
     
-    .mining-hash-badge {
-        justify-content: center;
-        margin-top: 1rem;
+    .footer-description {
+        text-align: center !important;
+        max-width: 100% !important;
     }
     
-    .banner-content {
-        text-align: center;
-        align-items: center;
+    .social-links {
+        justify-content: center !important;
     }
     
     .footer-top {
         padding: 32px 0 20px 0;
     }
     
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 28px;
-    }
-    
-    .footer-main {
-        text-align: center;
-        align-items: center;
-    }
-    
-    .footer-description {
-        max-width: 100%;
-        text-align: center;
-    }
-    
-    .social-links {
-        justify-content: center;
-    }
-    
-    .footer-column {
-        text-align: center;
-        align-items: center;
+    .footer-bottom-container {
+        padding: 8px 20px 20px 20px;
     }
     
     .copyright-line {
@@ -1964,17 +2251,35 @@ body {
         text-align: center;
     }
     
-    .footer-bottom-container {
-        padding: 8px 20px 20px 20px;
-    }
-    
-    .profile-modal-container {
-        margin: 10vh auto;
-        width: 95%;
-    }
-    
     .dropdown-menu {
-        width: 280px;
+        width: 380px;
+    }
+}
+
+@media (max-width: 640px) {
+    .dropdown-menu {
+        width: 380px;
+        right: -10px;
+    }
+    
+    .badge-icon, .badge-icon-placeholder {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .badge-icon-img {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .badge-icon-default {
+        font-size: 1.9rem;
+    }
+    
+    .badge-slot::after {
+        white-space: normal;
+        max-width: 180px;
+        text-align: center;
     }
 }
 
@@ -1997,10 +2302,6 @@ body {
         font-size: 0.65rem;
     }
     
-    .nav-connect-btn i {
-        font-size: 0.6rem;
-    }
-    
     .content-scroll {
         padding: 95px 12px 25px 12px;
     }
@@ -2008,14 +2309,6 @@ body {
     .games-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
-    }
-    
-    .game-card-icon {
-        font-size: 1.4rem;
-    }
-    
-    .game-card h4 {
-        font-size: 0.75rem;
     }
     
     .hero-platform-card {
@@ -2032,8 +2325,34 @@ body {
     }
     
     .dropdown-menu {
-        width: calc(100vw - 32px);
-        right: -10px;
+        width: calc(100vw - 24px);
+        right: -8px;
+    }
+    
+    .dropdown-badges-grid {
+        gap: 12px;
+    }
+    
+    .badge-icon, .badge-icon-placeholder {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .badge-icon-img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .badge-icon-default {
+        font-size: 1.7rem;
+    }
+    
+    .badge-slot::after {
+        font-size: 0.6rem;
+        padding: 6px 12px;
+        white-space: normal;
+        max-width: 160px;
+        text-align: center;
     }
     
     .footer-top {

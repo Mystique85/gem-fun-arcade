@@ -15,7 +15,69 @@ class HeaderComponent {
         return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
     }
 
+    getBadgesHTML() {
+        const badges = [
+            { name: 'OG', image: '/OG.png', locked: true, description: 'OG Player - Early adopter badge' },
+            { name: 'Retro', image: '/Retro.png', locked: true, description: 'Retro Player - Classic arcade enthusiast' },
+            { name: 'SOON', image: null, locked: false, isPlaceholder: true, description: 'Coming soon...' },
+            { name: 'SOON', image: null, locked: false, isPlaceholder: true, description: 'Coming soon...' },
+            { name: 'SOON', image: null, locked: false, isPlaceholder: true, description: 'Coming soon...' },
+            { name: 'SOON', image: null, locked: false, isPlaceholder: true, description: 'Coming soon...' },
+            { name: 'Hodler', image: '/Hodler.png', locked: true, description: 'Hodler - Holds GEM FUN tokens' },
+            { name: 'Support', image: '/Support.png', locked: true, description: 'Supporter - Helped support the project' }
+        ];
+
+        let badgesHTML = `
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-badges-section">
+                <div class="dropdown-badges-header">
+                    <span class="badges-title">ACHIEVEMENTS</span>
+                </div>
+                <div class="dropdown-badges-grid">
+        `;
+
+        for (let i = 0; i < badges.length; i++) {
+            const badge = badges[i];
+            const isLocked = badge.locked;
+            const isPlaceholder = badge.isPlaceholder;
+            const tooltipText = badge.description;
+            
+            if (isPlaceholder) {
+                badgesHTML += `
+                    <div class="badge-slot placeholder" data-tooltip="${tooltipText}">
+                        <div class="badge-icon-placeholder">
+                            <span class="placeholder-text">soon</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const lockedClass = isLocked ? 'locked' : '';
+                const badgeIcon = badge.image 
+                    ? `<img src="${badge.image}" alt="${badge.name}" class="badge-icon-img">`
+                    : `<div class="badge-icon-default">🏅</div>`;
+                
+                badgesHTML += `
+                    <div class="badge-slot ${lockedClass}" data-tooltip="${tooltipText}">
+                        <div class="badge-icon">
+                            ${badgeIcon}
+                            ${isLocked ? '<div class="lock-overlay">🔒</div>' : ''}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        badgesHTML += `
+                </div>
+            </div>
+        `;
+
+        return badgesHTML;
+    }
+
     getHTML() {
+        const badgesHTML = this.getBadgesHTML();
+        
         return `
             <div class="logo-area">
                 <img src="/Awesome.jpg" alt="GEM FUN" class="gem-logo">
@@ -49,22 +111,17 @@ class HeaderComponent {
                         <i class="fas fa-chevron-down dropdown-arrow"></i>
                     </button>
                     <div class="dropdown-menu" id="dropdownMenu" style="display: none;">
+                        <button class="dropdown-close-btn" id="dropdownCloseBtn">✕</button>
+                        
                         <div class="dropdown-header">
-                            <div class="dropdown-avatar">👤</div>
-                            <div class="dropdown-info">
-                                <div class="dropdown-name">My Account</div>
-                                <div class="dropdown-status">Connected</div>
+                            <div class="gamer-hub-title">
+                                <span class="hub-text">GAMER</span>
+                                <span class="hub-text-highlight">HUB</span>
                             </div>
+                            <div class="hub-glow"></div>
                         </div>
+                        
                         <div class="dropdown-divider"></div>
-                        <div class="dropdown-item" id="dropdownAddress">
-                            <i class="fas fa-wallet"></i>
-                            <div class="dropdown-item-content">
-                                <div class="dropdown-item-label">Wallet Address</div>
-                                <div class="dropdown-item-value" id="dropdownAddressValue">0x0000...0000</div>
-                            </div>
-                            <button class="dropdown-copy-btn" id="dropdownCopyBtn">📋</button>
-                        </div>
                         <div class="dropdown-item">
                             <img src="/Awesome.jpg" alt="GEM FUN" class="dropdown-gem-icon">
                             <div class="dropdown-item-content">
@@ -79,6 +136,9 @@ class HeaderComponent {
                                 <div class="dropdown-item-value">Base Network</div>
                             </div>
                         </div>
+                        
+                        ${badgesHTML}
+                        
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-disconnect-btn" id="disconnectFromDropdownBtn">
                             <i class="fas fa-sign-out-alt"></i>
@@ -101,12 +161,17 @@ class HeaderComponent {
         const betaBadge = document.getElementById('betaBadge');
         const curveStatsBtn = document.getElementById('curveStatsBtn');
         const userAddressShort = document.getElementById('userAddressShort');
-        const dropdownAddressValue = document.getElementById('dropdownAddressValue');
         const dropdownBalanceValue = document.getElementById('dropdownBalanceValue');
+        const dropdownCloseBtn = document.getElementById('dropdownCloseBtn');
+
+        if (dropdownCloseBtn) {
+            dropdownCloseBtn.onclick = () => {
+                if (dropdownMenu) dropdownMenu.style.display = 'none';
+            };
+        }
 
         if (address) {
             const shortAddress = `${address.slice(0,6)}...${address.slice(-4)}`;
-            const fullAddress = address;
             
             if (betaBadge) betaBadge.style.display = 'flex';
             if (curveStatsBtn) curveStatsBtn.style.display = 'flex';
@@ -114,7 +179,6 @@ class HeaderComponent {
             if (userProfileBtn) userProfileBtn.style.display = 'flex';
             if (dropdownMenu) dropdownMenu.style.display = 'none';
             if (userAddressShort) userAddressShort.innerText = shortAddress;
-            if (dropdownAddressValue) dropdownAddressValue.innerText = fullAddress;
             if (dropdownBalanceValue) dropdownBalanceValue.innerText = this.formatBalance(balance) + ' GEM';
         } else {
             if (betaBadge) betaBadge.style.display = 'none';
