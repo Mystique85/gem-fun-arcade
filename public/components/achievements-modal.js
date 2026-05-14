@@ -104,14 +104,21 @@ class AchievementsModal {
                     isQualified = window.badgesSystem.checkLegendaryHodlerQualification(window.gemBalance);
                     showClaimButton = isQualified && !isClaimed;
                 } else if (badge.id === 'og') {
-                    // OG - pokaż claim tylko jeśli NIE jest claimowany i spełnia warunki
                     showClaimButton = !isClaimed && window.userAddress && window.gemBalance > 0;
                 }
                 
-                // OG Claimowany - specjalny tooltip
+                // Tooltip dla claimowanych badge'y
                 let tooltipText = badge.description;
-                if (badge.id === 'og' && isClaimed) {
-                    tooltipText = 'OG Player - Claimed';
+                if (isClaimed) {
+                    if (badge.id === 'og') {
+                        tooltipText = 'OG Player - Claimed';
+                    } else if (badge.id === 'hodler') {
+                        tooltipText = 'Hodler - Claimed';
+                    } else if (badge.id === 'epic-hodler') {
+                        tooltipText = 'Epic Hodler - Claimed';
+                    } else if (badge.id === 'legendary-hodler') {
+                        tooltipText = 'Legendary Hodler - Claimed';
+                    }
                 }
                 
                 // Dla badge'y które mają przycisk CLAIM
