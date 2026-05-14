@@ -208,6 +208,8 @@
     <script src="components/header.js"></script>
     <script src="components/game-modal.js"></script>
     <script src="components/footer.js"></script>
+    <script src="components/dropdown-menu.js"></script>
+    <script src="components/achievements-modal.js"></script>
     <script src="web3-core.js"></script>
     <script src="games/snake.js"></script>
     <script src="games/flappy.js"></script>
@@ -215,9 +217,24 @@
     <script src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     <script src="curve-progress.js"></script>
+    <script src="badges/og-badge.js"></script>
+    <script src="badges/badges-system.js"></script>
     <script>
+        // Inicjalizacja wszystkich komponentów
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing components...');
+            
             if (typeof initFooter === 'function') initFooter();
+            if (typeof initHeader === 'function') initHeader();
+            if (typeof initAchievementsModal === 'function') initAchievementsModal();
+            
+            // Dropdown menu inicjalizuje się sam (ma setTimeout w swoim pliku)
+            // ale dodatkowo wywołujemy dla pewności
+            setTimeout(function() {
+                if (typeof initDropdownMenu === 'function') {
+                    initDropdownMenu();
+                }
+            }, 1000);
         });
     </script>
 </body>

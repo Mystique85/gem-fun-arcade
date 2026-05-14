@@ -241,7 +241,7 @@ body {
     border: 1px solid rgba(255, 215, 0, 0.2);
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-    overflow: hidden;
+    overflow: visible;
     z-index: 1001;
     animation: dropdownFadeIn 0.2s ease;
 }
@@ -433,6 +433,7 @@ body {
 .dropdown-badges-section {
     padding: 16px 20px;
     background: transparent;
+    overflow: visible;
 }
 
 .dropdown-badges-header {
@@ -497,7 +498,8 @@ body {
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     justify-items: center;
-    align-items: center;
+    align-items: start;
+    overflow: visible;
 }
 
 .badge-slot {
@@ -512,119 +514,6 @@ body {
 
 .badge-slot:hover {
     transform: translateY(-2px);
-}
-
-.badge-slot::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(8px);
-    background: #1a1a2a;
-    color: #ffffff;
-    font-size: 0.7rem;
-    font-weight: 500;
-    padding: 8px 14px;
-    border-radius: 10px;
-    white-space: nowrap;
-    z-index: 1002;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.25s ease;
-    pointer-events: none;
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
-}
-
-.badge-slot::before {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(2px);
-    border-width: 6px;
-    border-style: solid;
-    border-color: transparent transparent #1a1a2a transparent;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.25s ease;
-    pointer-events: none;
-    z-index: 1002;
-}
-
-.badge-slot:hover::before {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(-2px);
-}
-
-.badge-slot:hover::after {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(4px);
-}
-
-.badge-slot:nth-child(4n+1)::after {
-    left: 0;
-    transform: translateX(0) translateY(8px);
-}
-.badge-slot:nth-child(4n+1):hover::after {
-    transform: translateX(0) translateY(4px);
-}
-.badge-slot:nth-child(4n+1)::before {
-    left: 20px;
-    transform: translateX(0) translateY(2px);
-}
-.badge-slot:nth-child(4n+1):hover::before {
-    transform: translateX(0) translateY(-2px);
-}
-
-.badge-slot:nth-child(4n+2)::after {
-    left: 0;
-    transform: translateX(0) translateY(8px);
-}
-.badge-slot:nth-child(4n+2):hover::after {
-    transform: translateX(0) translateY(4px);
-}
-.badge-slot:nth-child(4n+2)::before {
-    left: 30px;
-    transform: translateX(0) translateY(2px);
-}
-.badge-slot:nth-child(4n+2):hover::before {
-    transform: translateX(0) translateY(-2px);
-}
-
-.badge-slot:nth-child(4n+3)::after {
-    left: 50%;
-    transform: translateX(-50%) translateY(8px);
-}
-.badge-slot:nth-child(4n+3):hover::after {
-    transform: translateX(-50%) translateY(4px);
-}
-.badge-slot:nth-child(4n+3)::before {
-    left: 50%;
-    transform: translateX(-50%) translateY(2px);
-}
-.badge-slot:nth-child(4n+3):hover::before {
-    transform: translateX(-50%) translateY(-2px);
-}
-
-.badge-slot:nth-child(4n+4)::after {
-    right: 0;
-    left: auto;
-    transform: translateX(0) translateY(8px);
-}
-.badge-slot:nth-child(4n+4):hover::after {
-    transform: translateX(0) translateY(4px);
-}
-.badge-slot:nth-child(4n+4)::before {
-    right: 20px;
-    left: auto;
-    transform: translateX(0) translateY(2px);
-}
-.badge-slot:nth-child(4n+4):hover::before {
-    transform: translateX(0) translateY(-2px);
 }
 
 .badge-icon {
@@ -672,6 +561,21 @@ body {
     justify-content: center;
     font-size: 0.7rem;
     border: 1px solid rgba(255, 215, 0, 0.4);
+    z-index: 5;
+}
+
+/* PO CLAIM - brak kłódki i brak znaczka */
+.badge-slot.claimed {
+    opacity: 1;
+    filter: none;
+}
+
+.badge-slot.claimed .lock-overlay {
+    display: none;
+}
+
+.badge-slot.claimed .check-overlay {
+    display: none;
 }
 
 .badge-slot.placeholder {
@@ -701,6 +605,129 @@ body {
     color: #8b92b0;
     text-transform: lowercase;
     letter-spacing: 0.5px;
+}
+
+/* ========================================
+   BADGE CLAIM BUTTON STYLES (Subtelne)
+   ======================================== */
+
+/* Delikatna pulsująca obwódka wokół całego badge */
+.badge-slot:has(.badge-claim-btn) {
+    animation: subtlePulse 2.5s ease-in-out infinite;
+    border-radius: 50%;
+}
+
+@keyframes subtlePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.12);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}
+
+/* Subtelny przycisk CLAIM na środku badge */
+.badge-claim-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    border: 0.5px solid rgba(255, 215, 0, 0.4);
+    border-radius: 18px;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-size: 0.55rem;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    z-index: 20;
+    font-family: 'Inter', sans-serif;
+}
+
+.badge-claim-btn:hover {
+    background: rgba(255, 215, 0, 0.8);
+    color: #000000;
+    border-color: #ffffff;
+    transform: translate(-50%, -50%) scale(1.02);
+}
+
+.badge-claim-btn.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.badge-claim-btn.loading .claim-text {
+    display: none;
+}
+
+.badge-claim-btn.loading::after {
+    content: "⏳";
+    font-size: 0.5rem;
+    animation: spin 1s linear infinite;
+}
+
+.badge-claim-btn.success {
+    background: rgba(0, 200, 80, 0.8);
+    color: #ffffff;
+    border-color: #ffffff;
+    pointer-events: none;
+    font-size: 0.5rem;
+    padding: 3px 6px;
+}
+
+.badge-claim-btn.error {
+    background: rgba(220, 0, 0, 0.8);
+    color: #ffffff;
+    border-color: #ffffff;
+    pointer-events: none;
+    font-size: 0.5rem;
+    padding: 3px 6px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Tooltip - na dole badge, nie wychodzi poza dropdown */
+.tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    background-color: #1a1a2a;
+    color: #fff;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 8px;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 8px;
+    white-space: nowrap;
+    font-size: 0.7rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.badge-slot:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Ukryj stare tooltipy */
+.badge-slot::before,
+.badge-slot::after {
+    display: none !important;
 }
 
 /* ========================================
@@ -2275,12 +2302,6 @@ body {
     .badge-icon-default {
         font-size: 1.9rem;
     }
-    
-    .badge-slot::after {
-        white-space: normal;
-        max-width: 180px;
-        text-align: center;
-    }
 }
 
 @media (max-width: 480px) {
@@ -2347,14 +2368,6 @@ body {
         font-size: 1.7rem;
     }
     
-    .badge-slot::after {
-        font-size: 0.6rem;
-        padding: 6px 12px;
-        white-space: normal;
-        max-width: 160px;
-        text-align: center;
-    }
-    
     .footer-top {
         padding: 26px 0 16px 0;
     }
@@ -2389,5 +2402,633 @@ body {
     
     .footer-bottom-container {
         padding: 6px 16px 16px 16px;
+    }
+}
+
+/* ========================================
+   CUSTOM DROPDOWN MENU STYLES
+   ======================================== */
+
+.custom-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 260px;
+    max-width: 90vw;
+    background: #000000;
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    z-index: 1001;
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+.custom-dropdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-dropdown-header .gamer-hub-title {
+    display: flex;
+    gap: 8px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 2;
+}
+
+.custom-dropdown-header .hub-text {
+    color: #8b92b0;
+    text-shadow: none;
+}
+
+.custom-dropdown-header .hub-text-highlight {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+}
+
+.custom-dropdown-header .hub-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.15), transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+    animation: hubPulse 3s ease-in-out infinite;
+}
+
+@keyframes hubPulse {
+    0%, 100% {
+        opacity: 0.5;
+        width: 120px;
+        height: 120px;
+    }
+    50% {
+        opacity: 1;
+        width: 160px;
+        height: 160px;
+    }
+}
+
+.custom-dropdown-header::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.custom-dropdown-header:hover::before {
+    opacity: 1;
+}
+
+.custom-dropdown-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+}
+
+.custom-dropdown-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.custom-dropdown-items-container {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.custom-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 12px;
+    background: transparent;
+}
+
+.custom-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.custom-dropdown-item.disconnect:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.dropdown-icon {
+    width: 20px;
+    height: 20px;
+    color: #BFC3CC;
+    flex-shrink: 0;
+}
+
+.custom-dropdown-item:hover .dropdown-icon {
+    color: #ffd700;
+}
+
+.custom-dropdown-item.disconnect:hover .dropdown-icon {
+    color: #ef4444;
+}
+
+.custom-dropdown-item .item-text {
+    flex: 1;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #eef2ff;
+}
+
+.custom-dropdown-item.disconnect .item-text {
+    color: #ef4444;
+}
+
+.item-soon {
+    font-size: 0.55rem;
+    font-weight: 400;
+    color: #6B7280;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+}
+
+.custom-dropdown-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+    margin: 8px 0;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   ACHIEVEMENTS MODAL STYLES
+   ======================================== */
+
+.achievements-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.achievements-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+}
+
+.achievements-modal-container {
+    position: relative;
+    width: auto;
+    min-width: 600px;
+    max-width: 800px;
+    background: #0a0a0c;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    overflow: visible;
+    z-index: 2001;
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.achievements-modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 18px 24px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.achievements-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.achievements-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+/* Nagłówek ACHIEVEMENTS z podkreśleniem i pulsującą kropką */
+.achievements-modal-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.achievements-modal-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -30px;
+    right: -30px;
+    width: calc(100% + 60px);
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ffd700, #ff8c00, #ffd700, transparent);
+    border-radius: 2px;
+}
+
+.achievements-modal-title::before {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: #ffd700;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ffd700;
+    animation: pulseGlowAchievements 2s infinite;
+}
+
+@keyframes pulseGlowAchievements {
+    0%, 100% {
+        opacity: 0.5;
+        box-shadow: 0 0 4px #ffd700;
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 12px #ffd700;
+    }
+}
+
+.achievements-modal-body {
+    padding: 30px 24px;
+    overflow: visible;
+}
+
+.achievements-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 40px;
+    column-gap: 20px;
+    justify-items: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+/* Karta badge */
+.achievement-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.achievement-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Tooltip */
+.achievement-card::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: #1a1a2a;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 10px;
+    white-space: nowrap;
+    z-index: 1002;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    pointer-events: none;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+.achievement-card::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(2px);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent #1a1a2a transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    pointer-events: none;
+    z-index: 1002;
+}
+
+.achievement-card:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-2px);
+}
+
+.achievement-card:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(4px);
+}
+
+/* Dostosowanie tooltip dla pierwszej i ostatniej kolumny */
+.achievement-card:nth-child(4n+1)::after {
+    left: 0;
+    transform: translateX(0) translateY(8px);
+}
+.achievement-card:nth-child(4n+1):hover::after {
+    transform: translateX(0) translateY(4px);
+}
+.achievement-card:nth-child(4n+1)::before {
+    left: 20px;
+    transform: translateX(0) translateY(2px);
+}
+.achievement-card:nth-child(4n+1):hover::before {
+    transform: translateX(0) translateY(-2px);
+}
+
+.achievement-card:nth-child(4n+4)::after {
+    left: auto;
+    right: 0;
+    transform: translateX(0) translateY(8px);
+}
+.achievement-card:nth-child(4n+4):hover::after {
+    transform: translateX(0) translateY(4px);
+}
+.achievement-card:nth-child(4n+4)::before {
+    left: auto;
+    right: 20px;
+    transform: translateX(0) translateY(2px);
+}
+.achievement-card:nth-child(4n+4):hover::before {
+    transform: translateX(0) translateY(-2px);
+}
+
+/* Pulsująca obwódka dla badge z przyciskiem CLAIM (tylko OG) */
+.achievement-card:has(.achievement-claim-btn) .achievement-icon img {
+    animation: claimPulse 2s ease-in-out infinite;
+    border-radius: 50%;
+}
+
+@keyframes claimPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}
+
+/* Stan zablokowany dla badge'y (Retro, Hodler, Support) */
+.achievement-card.locked {
+    opacity: 0.35;
+    filter: grayscale(0.8);
+}
+
+/* Stan claimowany dla OG */
+.achievement-card.claimed {
+    opacity: 1;
+    filter: none;
+}
+
+.achievement-icon {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.achievement-icon img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Kłódka w prawym dolnym rogu */
+.lock-icon {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+/* Przycisk CLAIM na środku badge (tylko OG) */
+.achievement-claim-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 215, 0, 0.6);
+    border-radius: 30px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    z-index: 20;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+.achievement-claim-btn:hover {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000000;
+    border-color: #ffffff;
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.6);
+}
+
+.achievement-claim-btn.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.achievement-claim-btn.loading::after {
+    content: "⏳";
+    animation: spin 1s linear infinite;
+}
+
+.achievement-claim-btn.success {
+    background: linear-gradient(135deg, #00c853, #00e676);
+    color: #ffffff;
+    border-color: #ffffff;
+    pointer-events: none;
+}
+
+.achievement-claim-btn.error {
+    background: linear-gradient(135deg, #d50000, #ff1744);
+    color: #ffffff;
+    border-color: #ffffff;
+    pointer-events: none;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Placeholder dla SOON */
+.achievement-icon-placeholder {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed rgba(255, 215, 0, 0.25);
+}
+
+.achievement-icon-placeholder .placeholder-text {
+    font-size: 0.7rem;
+    color: #8b92b0;
+}
+
+.achievements-loading, .achievements-error {
+    text-align: center;
+    padding: 40px;
+    color: #8b92b0;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .achievements-badges-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px 20px;
+    }
+    
+    .achievements-modal-container {
+        min-width: 500px;
+        max-width: 700px;
+    }
+}
+
+@media (max-width: 640px) {
+    .achievements-badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px 15px;
+    }
+    
+    .achievements-modal-container {
+        min-width: 400px;
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .achievements-badges-grid {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+    }
+    
+    .achievements-modal-container {
+        min-width: 280px;
+        max-width: 350px;
     }
 }

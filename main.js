@@ -1,3 +1,5 @@
+// main.js
+
 let headerComponent = null;
 
 const GAMES = [
@@ -29,14 +31,12 @@ function updateRequirementMessage(balance) {
     const requirementMsg = document.querySelector('.gem-requirement');
     if (!requirementMsg) return;
     
-    const heroSection = document.querySelector('.hero');
     const whyPlay = document.querySelector('.why-play');
     const rankingsCustom = document.querySelector('.ranking-custom');
     const rewards = document.querySelector('.rewards');
     const events = document.querySelector('.events');
     const whyLogin = document.querySelector('.why-login');
     const howItWorks = document.querySelector('.how-it-works');
-    const finalCta = document.querySelector('.final-cta');
     const tokenEcosystem = document.getElementById('tokenEcosystemSection');
     
     const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
@@ -44,14 +44,12 @@ function updateRequirementMessage(balance) {
     const buyLink = 'https://hashcoin.farm/gem';
     
     if (!window.userAddress) {
-        if (heroSection) heroSection.style.display = 'block';
         if (whyPlay) whyPlay.style.display = 'block';
         if (rankingsCustom) rankingsCustom.style.display = 'block';
         if (rewards) rewards.style.display = 'block';
         if (events) events.style.display = 'block';
         if (whyLogin) whyLogin.style.display = 'block';
         if (howItWorks) howItWorks.style.display = 'block';
-        if (finalCta) finalCta.style.display = 'flex';
         if (tokenEcosystem) tokenEcosystem.style.display = 'block';
         requirementMsg.style.display = 'block';
         requirementMsg.innerHTML = '🔌 Please connect your wallet first to play games!';
@@ -62,14 +60,12 @@ function updateRequirementMessage(balance) {
         requirementMsg.style.maxWidth = '100%';
         requirementMsg.style.margin = '20px 0';
     } else if (balance < minRequired) {
-        if (heroSection) heroSection.style.display = 'none';
         if (whyPlay) whyPlay.style.display = 'none';
         if (rankingsCustom) rankingsCustom.style.display = 'none';
         if (rewards) rewards.style.display = 'none';
         if (events) events.style.display = 'none';
         if (whyLogin) whyLogin.style.display = 'none';
         if (howItWorks) howItWorks.style.display = 'none';
-        if (finalCta) finalCta.style.display = 'none';
         if (tokenEcosystem) tokenEcosystem.style.display = 'none';
         requirementMsg.style.display = 'block';
         requirementMsg.innerHTML = `
@@ -90,14 +86,12 @@ function updateRequirementMessage(balance) {
         requirementMsg.style.maxWidth = '100%';
         requirementMsg.style.margin = '20px 0';
     } else {
-        if (heroSection) heroSection.style.display = 'none';
         if (whyPlay) whyPlay.style.display = 'none';
         if (rankingsCustom) rankingsCustom.style.display = 'none';
         if (rewards) rewards.style.display = 'none';
         if (events) events.style.display = 'none';
         if (whyLogin) whyLogin.style.display = 'none';
         if (howItWorks) howItWorks.style.display = 'none';
-        if (finalCta) finalCta.style.display = 'none';
         if (tokenEcosystem) tokenEcosystem.style.display = 'none';
         requirementMsg.style.display = 'none';
     }
@@ -149,9 +143,13 @@ function renderGamesGrid() {
                     }
                     return;
                 }
+                
+                // Użyj bezpośrednio window.gemBalance
                 let currentBalance = window.gemBalance;
-                if (window.refreshBalance) currentBalance = await window.refreshBalance();
+                console.log('💰 Game check - Balance:', currentBalance);
+                
                 const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
+                
                 if (currentBalance < minRequired) {
                     updateRequirementMessage(currentBalance);
                     const requirementMsg = document.querySelector('.gem-requirement');
@@ -191,17 +189,7 @@ function setupLeaderboardFilters() {
     });
 }
 
-function initHeader() {
-    const headerInner = document.querySelector('#mainHeader .header-inner');
-    if (headerInner && window.HeaderComponent) {
-        headerComponent = new window.HeaderComponent();
-        headerInner.innerHTML = headerComponent.getHTML();
-        if (window.setHeaderComponent) window.setHeaderComponent(headerComponent);
-    }
-}
-
 function initApp() {
-    initHeader();
     renderGamesGrid();
     setupLeaderboardFilters();
     updateLeaderboard('all');
@@ -236,6 +224,37 @@ window.onBalanceUpdateForGames = (balance) => {
 
 window.updateGlobalRanking = () => updateLeaderboard('all');
 
+// Nasłuchiwanie na eventy salda
+window.addEventListener('balanceUpdated', (e) => {
+    console.log('💰 Balance updated event:', e.detail.balance);
+    updateRequirementMessage(e.detail.balance);
+});
+
+window.addEventListener('walletConnected', (e) => {
+    console.log('🔗 Wallet connected event:', e.detail.address);
+    setTimeout(() => {
+        updateRequirementMessage(e.detail.balance);
+    }, 500);
+});
+
+// Eksportuj funkcję globalnie
+window.refreshBalanceMessage = function() {
+    updateRequirementMessage(window.gemBalance || 0);
+};
+
+// Nadpisanie updateRequirementMessage z opóźnieniem
+const originalUpdateRequirementMessage = updateRequirementMessage;
+window.updateRequirementMessage = function(balance) {
+    if (balance === 0 && window.userAddress && window.gemBalance === 0) {
+        console.log('⏳ Balance still loading, waiting...');
+        setTimeout(() => {
+            window.refreshBalanceMessage();
+        }, 500);
+        return;
+    }
+    originalUpdateRequirementMessage(balance);
+};
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
 } else {
@@ -257,212 +276,3 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroCtaBtn) heroCtaBtn.onclick = handleConnect;
     toggleBannerSection();
 });
-
-if (typeof window.web3Initialized === 'undefined') {
-    window.web3Initialized = true;
-
-    let web3;
-    let userAddress = null;
-    let tokenContract = null;
-    let userGemBalance = 0;
-    let tradingEnabled = false;
-    let headerComponent = null;
-
-    const MIN_GEM_REQUIRED = 10000;
-
-    window.setHeaderComponent = (component) => {
-        headerComponent = component;
-        updateHeaderUI();
-        setTimeout(() => attachWalletEvents(), 100);
-    };
-
-    function attachWalletEvents() {
-        const connectBtn = document.getElementById('connectWalletBtn');
-        const disconnectBtn = document.getElementById('disconnectWalletBtn');
-        if (connectBtn) {
-            const newConnectBtn = connectBtn.cloneNode(true);
-            connectBtn.parentNode.replaceChild(newConnectBtn, connectBtn);
-            newConnectBtn.onclick = (e) => { e.preventDefault(); connectWallet(); };
-        }
-        if (disconnectBtn) {
-            const newDisconnectBtn = disconnectBtn.cloneNode(true);
-            disconnectBtn.parentNode.replaceChild(newDisconnectBtn, disconnectBtn);
-            newDisconnectBtn.onclick = (e) => { e.preventDefault(); disconnectWallet(); };
-        }
-    }
-
-    function updateHeaderUI() {
-        if (headerComponent) headerComponent.updateWalletUI(userAddress, userGemBalance, tradingEnabled);
-        window.userAddress = userAddress;
-        window.gemBalance = userGemBalance;
-        if (window.onBalanceUpdateForGames) window.onBalanceUpdateForGames(userGemBalance);
-        toggleBannerSection();
-        toggleLeaderboardForLoggedIn();
-    }
-
-    function disconnectWallet() {
-        userAddress = null;
-        tokenContract = null;
-        web3 = null;
-        updateHeaderUI();
-        window.spendGem = async () => false;
-        window.gemBalance = 0;
-        if (window.refreshGameAfterWallet) window.refreshGameAfterWallet();
-        attachWalletEvents();
-        toggleBannerSection();
-        toggleLeaderboardForLoggedIn();
-    }
-
-    async function refreshBalance() {
-        if (!userAddress || !tokenContract) return 0;
-        try {
-            const rawBalance = await tokenContract.methods.balanceOf(userAddress).call();
-            userGemBalance = rawBalance / (10 ** TOKEN_DECIMALS);
-            window.gemBalance = userGemBalance;
-            updateHeaderUI();
-            if (window.onBalanceUpdate) window.onBalanceUpdate(userGemBalance);
-            return userGemBalance;
-        } catch (err) {
-            return 0;
-        }
-    }
-
-    async function checkTradingStatus() {
-        if (!tokenContract) return false;
-        try {
-            tradingEnabled = await tokenContract.methods.tradingStarted().call();
-            updateHeaderUI();
-            return tradingEnabled;
-        } catch (err) {
-            return false;
-        }
-    }
-
-    async function checkMinimumBalance() {
-        if (!userAddress) return false;
-        return userGemBalance >= MIN_GEM_REQUIRED;
-    }
-
-    async function spendGem(amount) {
-        if (!userAddress || !tokenContract) return false;
-        const hasMinimum = await checkMinimumBalance();
-        if (!hasMinimum) return false;
-        if (!tradingEnabled) return false;
-        if (userGemBalance < amount) return false;
-        try {
-            const amountWei = web3.utils.toWei(amount.toString(), 'ether');
-            await tokenContract.methods.transfer(GAME_WALLET_ADDRESS, amountWei).send({ from: userAddress, gas: 100000 });
-            await refreshBalance();
-            return true;
-        } catch (err) {
-            return false;
-        }
-    }
-
-    async function connectWallet() {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                if (!accounts || accounts.length === 0) throw new Error('No accounts returned');
-                userAddress = accounts[0];
-                web3 = new Web3(window.ethereum);
-                const chainId = await web3.eth.getChainId();
-                if (chainId !== 8453) {
-                    try {
-                        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
-                    } catch (e) {}
-                }
-                tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-                await checkTradingStatus();
-                await refreshBalance();
-                updateHeaderUI();
-                window.spendGem = spendGem;
-                window.refreshBalance = refreshBalance;
-                window.ethereum.on('accountsChanged', async (newAccounts) => {
-                    if (newAccounts && newAccounts.length > 0) {
-                        userAddress = newAccounts[0];
-                        await refreshBalance();
-                        await checkTradingStatus();
-                        updateHeaderUI();
-                        if (window.onAccountChange) window.onAccountChange(userAddress);
-                        toggleBannerSection();
-                        toggleLeaderboardForLoggedIn();
-                    } else {
-                        disconnectWallet();
-                        if (window.onAccountChange) window.onAccountChange(null);
-                        toggleBannerSection();
-                        toggleLeaderboardForLoggedIn();
-                    }
-                });
-                if (window.onWalletConnect) window.onWalletConnect(userAddress);
-                attachWalletEvents();
-                toggleBannerSection();
-                toggleLeaderboardForLoggedIn();
-            } catch (err) {
-                userAddress = null;
-                updateHeaderUI();
-                toggleBannerSection();
-                toggleLeaderboardForLoggedIn();
-            }
-        } else {
-            window.open('https://metamask.io/', '_blank');
-        }
-    }
-
-    async function restoreConnection() {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                if (accounts && accounts.length > 0) {
-                    userAddress = accounts[0];
-                    web3 = new Web3(window.ethereum);
-                    const chainId = await web3.eth.getChainId();
-                    if (chainId !== 8453) {
-                        try {
-                            await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
-                        } catch (e) {}
-                    }
-                    tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-                    await checkTradingStatus();
-                    await refreshBalance();
-                    updateHeaderUI();
-                    window.spendGem = spendGem;
-                    window.refreshBalance = refreshBalance;
-                    if (window.onWalletConnect) window.onWalletConnect(userAddress);
-                    attachWalletEvents();
-                    toggleBannerSection();
-                    toggleLeaderboardForLoggedIn();
-                } else {
-                    toggleBannerSection();
-                    toggleLeaderboardForLoggedIn();
-                }
-            } catch (err) {
-                toggleBannerSection();
-                toggleLeaderboardForLoggedIn();
-            }
-        } else {
-            toggleBannerSection();
-            toggleLeaderboardForLoggedIn();
-        }
-    }
-
-    window.spendGem = async () => false;
-    window.gemBalance = 0;
-    window.userAddress = null;
-    window.connectWallet = connectWallet;
-    window.disconnectWallet = disconnectWallet;
-    window.getMinGemRequired = () => MIN_GEM_REQUIRED;
-    window.checkMinimumBalance = checkMinimumBalance;
-    
-    window.getGameWalletBalance = async function() {
-        if (!tokenContract) return 0;
-        try {
-            const rawBalance = await tokenContract.methods.balanceOf(GAME_WALLET_ADDRESS).call();
-            return rawBalance / (10 ** TOKEN_DECIMALS);
-        } catch (err) {
-            return 0;
-        }
-    };
-
-    setTimeout(() => restoreConnection(), 500);
-}
