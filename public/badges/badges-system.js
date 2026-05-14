@@ -1,5 +1,3 @@
-// badges-system.js - Główny system zarządzania badge'ami
-
 class BadgesSystem {
     constructor() {
         this.badgesModules = {};
@@ -16,8 +14,6 @@ class BadgesSystem {
         await this.loadAllBadgesModules();
         this.setupWalletListener();
         this.isInitialized = true;
-        
-        console.log('✅ Badges System initialized');
     }
 
     setupWalletListener() {
@@ -36,10 +32,7 @@ class BadgesSystem {
     async loadAllBadgesModules() {
         if (window.ogBadgeModule) {
             this.badgesModules['og-badge'] = window.ogBadgeModule;
-            console.log('✅ Loaded: og-badge module');
         }
-        
-        console.log('Loaded modules:', Object.keys(this.badgesModules));
     }
 
     loadClaimedBadges() {
@@ -48,7 +41,6 @@ class BadgesSystem {
             try {
                 const data = JSON.parse(saved);
                 this.claimedBadges = new Set(data);
-                console.log('Loaded claimed badges:', [...this.claimedBadges]);
             } catch(e) {}
         }
     }
@@ -64,7 +56,6 @@ class BadgesSystem {
     async claimBadge(badgeId, moduleName) {
         const module = this.badgesModules[moduleName];
         if (!module && !['hodler', 'epic-hodler', 'legendary-hodler'].includes(badgeId)) {
-            console.error('Module not found:', moduleName);
             return { success: false, message: 'Badge module not found' };
         }
 
@@ -72,7 +63,6 @@ class BadgesSystem {
             return { success: false, message: 'Badge already claimed!' };
         }
 
-        // Sprawdzenie kwalifikacji dla hodler badge'y
         if (badgeId === 'hodler') {
             if (this.userBalance < 5000000) {
                 return { success: false, message: 'Need 5,000,000 GEM FUN tokens' };
@@ -98,24 +88,20 @@ class BadgesSystem {
         return { success: true, message: 'Badge claimed successfully!' };
     }
 
-    // Sprawdzenie czy użytkownik kwalifikuje się do badge'a Hodler
     checkHodlerQualification(balance) {
         return balance >= 5000000;
     }
 
-    // Sprawdzenie czy użytkownik kwalifikuje się do badge'a Epic Hodler
     checkEpicHodlerQualification(balance) {
         return balance >= 15000000;
     }
 
-    // Sprawdzenie czy użytkownik kwalifikuje się do badge'a Legendary Hodler
     checkLegendaryHodlerQualification(balance) {
         return balance >= 30000000;
     }
 
     getBadgesList() {
         return [
-            // Wiersz 1
             { 
                 id: 'og', 
                 name: 'OG', 
@@ -147,7 +133,6 @@ class BadgesSystem {
                 isPlaceholder: true,
                 description: 'Coming soon...'
             },
-            // Wiersz 2
             { 
                 id: 'hodler', 
                 name: 'Hodler', 
@@ -180,7 +165,6 @@ class BadgesSystem {
                 isPlaceholder: true,
                 description: 'Coming soon...'
             },
-            // Wiersz 3
             { 
                 id: 'soon4', 
                 name: 'SOON', 
@@ -243,7 +227,6 @@ class BadgesSystem {
             let showClaimButton = false;
             let isQualified = false;
             
-            // Sprawdzenie dla OG
             if (badge.id === 'og') {
                 isQualified = !isClaimed && this.userAddress && this.userBalance > 0;
                 if (isQualified) {
@@ -253,7 +236,6 @@ class BadgesSystem {
                     }
                 }
             }
-            // Sprawdzenie dla hodler badge'y
             else if (badge.id === 'hodler') {
                 isQualified = this.checkHodlerQualification(this.userBalance);
                 showClaimButton = isQualified && !isClaimed;
@@ -339,10 +321,8 @@ class BadgesSystem {
     }
 }
 
-// Inicjalizacja systemu
 window.badgesSystem = new BadgesSystem();
 
-// Uruchom po załadowaniu strony
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         window.badgesSystem.init();

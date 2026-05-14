@@ -1,5 +1,3 @@
-// components/header.js
-
 class HeaderComponent {
     constructor() {
         this.userAddress = null;
@@ -89,22 +87,17 @@ class HeaderComponent {
 
 window.HeaderComponent = HeaderComponent;
 
-// ========== INICJALIZACJA HEADER ==========
 function initHeader() {
-    console.log('initHeader called');
     const headerInner = document.querySelector('#mainHeader .header-inner');
     if (headerInner && window.HeaderComponent) {
         const headerComponent = new window.HeaderComponent();
         headerInner.innerHTML = headerComponent.getHTML();
         if (window.setHeaderComponent) window.setHeaderComponent(headerComponent);
-        console.log('Header initialized successfully');
         return headerComponent;
     }
-    console.log('Failed to initialize header');
     return null;
 }
 
-// Automatyczne inicjalizowanie header'a po załadowaniu strony
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initHeader);
 } else {

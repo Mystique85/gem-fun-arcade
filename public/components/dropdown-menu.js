@@ -1,5 +1,3 @@
-// components/dropdown-menu.js
-
 class DropdownMenu {
     constructor() {
         this.isOpen = false;
@@ -79,7 +77,6 @@ class DropdownMenu {
         const profileDropdown = document.getElementById('profileDropdown');
         if (profileDropdown) {
             profileDropdown.insertAdjacentHTML('beforeend', menuHTML);
-            console.log('✅ Dropdown menu created');
         }
     }
 
@@ -138,9 +135,7 @@ class DropdownMenu {
         }
     }
 
-    updateUserData() {
-        console.log('Updating user data in dropdown');
-    }
+    updateUserData() {}
 
     handleAction(action, shouldClose) {
         if (shouldClose) {
@@ -149,13 +144,10 @@ class DropdownMenu {
         
         switch(action) {
             case 'profile':
-                console.log('My Profile - coming soon');
                 break;
             case 'guild':
-                console.log('Guild - coming soon');
                 break;
             case 'leaderboard':
-                console.log('Leaderboard - coming soon');
                 break;
             case 'achievements':
                 if (window.achievementsModal) {
@@ -172,7 +164,6 @@ class DropdownMenu {
 }
 
 function initDropdownMenu() {
-    console.log('initDropdownMenu called');
     if (!window.dropdownMenuInstance) {
         window.dropdownMenuInstance = new DropdownMenu();
     }
@@ -181,7 +172,6 @@ function initDropdownMenu() {
 window.DropdownMenu = DropdownMenu;
 window.initDropdownMenu = initDropdownMenu;
 
-// Automatyczna inicjalizacja
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(initDropdownMenu, 1000);

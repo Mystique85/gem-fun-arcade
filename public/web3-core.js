@@ -1,5 +1,3 @@
-// web3-core.js
-
 if (typeof window.web3Initialized === 'undefined') {
     window.web3Initialized = true;
 
@@ -54,10 +52,8 @@ if (typeof window.web3Initialized === 'undefined') {
             newConnectBtn.onclick = async (e) => { 
                 e.preventDefault(); 
                 manualDisconnect = false;
-                console.log('🔄 Manual connect button clicked');
                 await connectWallet(true);
             };
-            console.log('✅ Connect button event attached');
         }
     }
 
@@ -67,8 +63,6 @@ if (typeof window.web3Initialized === 'undefined') {
         }
         window.userAddress = userAddress;
         window.gemBalance = userGemBalance;
-        
-        console.log('💰 UpdateHeaderUI - Balance:', userGemBalance, 'Address:', userAddress);
         
         if (window.onBalanceUpdateForGames) {
             window.onBalanceUpdateForGames(userGemBalance);
@@ -96,7 +90,6 @@ if (typeof window.web3Initialized === 'undefined') {
     }
 
     function disconnectWallet() {
-        console.log('🔌 Manual disconnect...');
         manualDisconnect = true;
         userAddress = null;
         tokenContract = null;
@@ -116,30 +109,21 @@ if (typeof window.web3Initialized === 'undefined') {
         if (window.badgesSystem) window.badgesSystem.updateBadgesUI();
         
         attachWalletEvents();
-        
-        console.log('✅ Wallet disconnected');
     }
 
     window.refreshBalance = async function() {
-        console.log('🔄 refreshBalance called - userAddress:', userAddress, 'hasTokenContract:', !!tokenContract);
-        
         if (!userAddress) {
-            console.log('❌ No user address');
             return 0;
         }
         
         if (!tokenContract) {
-            console.log('⚠️ Token contract missing, attempting to recreate...');
             if (web3 && userAddress) {
                 try {
                     tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-                    console.log('✅ Token contract recreated');
                 } catch (err) {
-                    console.error('❌ Failed to recreate contract:', err);
-                    return userGemBalance; // Zwróć ostatnie znane saldo
+                    return userGemBalance;
                 }
             } else {
-                console.log('❌ Cannot recreate contract - no web3 or address');
                 return userGemBalance;
             }
         }
@@ -149,7 +133,6 @@ if (typeof window.web3Initialized === 'undefined') {
             const newBalance = Number(rawBalance) / (10 ** TOKEN_DECIMALS);
             
             if (userGemBalance !== newBalance) {
-                console.log('✅ Balance changed from', userGemBalance, 'to', newBalance);
                 userGemBalance = newBalance;
                 window.gemBalance = userGemBalance;
                 updateHeaderUI();
@@ -168,22 +151,16 @@ if (typeof window.web3Initialized === 'undefined') {
                         window.updateRequirementMessage(userGemBalance);
                     }
                 }, 100);
-            } else {
-                console.log('✅ Balance unchanged:', userGemBalance);
             }
             
             return userGemBalance;
         } catch (err) {
-            console.error('❌ Error refreshing balance:', err);
             return userGemBalance;
         }
     };
 
     async function connectWallet(forcePrompt = false) {
-        console.log('🔗 Connecting wallet... forcePrompt:', forcePrompt);
-        
         if (!window.ethereum) {
-            console.log('❌ MetaMask not installed');
             window.open('https://metamask.io/', '_blank');
             return;
         }
@@ -197,9 +174,7 @@ if (typeof window.web3Initialized === 'undefined') {
                         method: 'wallet_revokePermissions',
                         params: [{ eth_accounts: {} }]
                     });
-                } catch (e) {
-                    console.log('Revoke permissions not supported or failed:', e);
-                }
+                } catch (e) {}
                 
                 accounts = await window.ethereum.request({ 
                     method: 'eth_requestAccounts',
@@ -228,18 +203,14 @@ if (typeof window.web3Initialized === 'undefined') {
                         method: 'wallet_switchEthereumChain',
                         params: [{ chainId: '0x2105' }]
                     });
-                } catch (e) {
-                    console.log('Network switch cancelled or failed');
-                }
+                } catch (e) {}
             }
             
             tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-            console.log('✅ Token contract created');
             
             const rawBalance = await tokenContract.methods.balanceOf(userAddress).call();
             userGemBalance = Number(rawBalance) / (10 ** TOKEN_DECIMALS);
             window.gemBalance = userGemBalance;
-            console.log('💰 Initial balance:', userGemBalance);
             
             updateHeaderUI();
             
@@ -252,7 +223,6 @@ if (typeof window.web3Initialized === 'undefined') {
                     await window.refreshBalance();
                     return true;
                 } catch (err) {
-                    console.error('Error spending gems:', err);
                     return false;
                 }
             };
@@ -281,15 +251,11 @@ if (typeof window.web3Initialized === 'undefined') {
                 }
             }, 200);
             
-            console.log('✅ Wallet connected successfully');
-            
         } catch (err) {
-            console.error('❌ Error connecting wallet:', err);
             userAddress = null;
             updateHeaderUI();
             
             if (err.code === 4001) {
-                console.log('User rejected the request');
                 alert('Please connect your wallet to continue.');
             }
         }
@@ -297,14 +263,10 @@ if (typeof window.web3Initialized === 'undefined') {
 
     async function restoreConnection() {
         if (manualDisconnect) {
-            console.log('⏭️ Skipping auto-connect after manual disconnect');
             return;
         }
         
-        console.log('🔄 Attempting to restore connection...');
-        
         if (!window.ethereum) {
-            console.log('No MetaMask detected');
             return;
         }
         
@@ -326,12 +288,10 @@ if (typeof window.web3Initialized === 'undefined') {
                 }
                 
                 tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-                console.log('✅ Token contract created (restored)');
                 
                 const rawBalance = await tokenContract.methods.balanceOf(userAddress).call();
                 userGemBalance = Number(rawBalance) / (10 ** TOKEN_DECIMALS);
                 window.gemBalance = userGemBalance;
-                console.log('💰 Restored balance:', userGemBalance);
                 
                 updateHeaderUI();
                 
@@ -344,22 +304,16 @@ if (typeof window.web3Initialized === 'undefined') {
                         await window.refreshBalance();
                         return true;
                     } catch (err) {
-                        console.error('Error spending gems:', err);
                         return false;
                     }
                 };
                 
                 if (window.onWalletConnect) window.onWalletConnect(userAddress);
                 attachWalletEvents();
-            } else {
-                console.log('No accounts found, user not connected');
             }
-        } catch (err) {
-            console.error('Error restoring connection:', err);
-        }
+        } catch (err) {}
     }
 
-    // Eksportuj funkcje globalnie
     window.spendGem = async () => false;
     window.gemBalance = 0;
     window.userAddress = null;
@@ -379,7 +333,6 @@ if (typeof window.web3Initialized === 'undefined') {
         }
     };
 
-    // Automatyczne przywracanie połączenia
     setTimeout(() => {
         restoreConnection();
     }, 500);

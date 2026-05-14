@@ -1,5 +1,3 @@
-// main.js
-
 let headerComponent = null;
 
 const GAMES = [
@@ -144,10 +142,7 @@ function renderGamesGrid() {
                     return;
                 }
                 
-                // Użyj bezpośrednio window.gemBalance
                 let currentBalance = window.gemBalance;
-                console.log('💰 Game check - Balance:', currentBalance);
-                
                 const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
                 
                 if (currentBalance < minRequired) {
@@ -224,29 +219,23 @@ window.onBalanceUpdateForGames = (balance) => {
 
 window.updateGlobalRanking = () => updateLeaderboard('all');
 
-// Nasłuchiwanie na eventy salda
 window.addEventListener('balanceUpdated', (e) => {
-    console.log('💰 Balance updated event:', e.detail.balance);
     updateRequirementMessage(e.detail.balance);
 });
 
 window.addEventListener('walletConnected', (e) => {
-    console.log('🔗 Wallet connected event:', e.detail.address);
     setTimeout(() => {
         updateRequirementMessage(e.detail.balance);
     }, 500);
 });
 
-// Eksportuj funkcję globalnie
 window.refreshBalanceMessage = function() {
     updateRequirementMessage(window.gemBalance || 0);
 };
 
-// Nadpisanie updateRequirementMessage z opóźnieniem
 const originalUpdateRequirementMessage = updateRequirementMessage;
 window.updateRequirementMessage = function(balance) {
     if (balance === 0 && window.userAddress && window.gemBalance === 0) {
-        console.log('⏳ Balance still loading, waiting...');
         setTimeout(() => {
             window.refreshBalanceMessage();
         }, 500);

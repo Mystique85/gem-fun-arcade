@@ -1,7 +1,3 @@
-/* ========================================
-   ACHIEVEMENTS MODAL STYLES
-   ======================================== */
-
 .achievements-modal {
     display: none;
     position: fixed;
@@ -99,7 +95,6 @@
     align-items: center;
 }
 
-/* Karta badge - tak jak w starym dropdown */
 .achievement-card {
     position: relative;
     display: flex;
@@ -114,7 +109,6 @@
     transform: translateY(-2px);
 }
 
-/* Tooltip - dokładnie taki sam jak w starym dropdown */
 .achievement-card::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -166,7 +160,6 @@
     transform: translateX(-50%) translateY(4px);
 }
 
-/* Dostosowanie pozycji dla pierwszego i ostatniego elementu */
 .achievement-card:first-child::after {
     left: 0;
     transform: translateX(0) translateY(8px);

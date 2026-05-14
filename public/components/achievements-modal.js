@@ -1,5 +1,3 @@
-// components/achievements-modal.js
-
 class AchievementsModal {
     constructor() {
         this.isOpen = false;
@@ -90,7 +88,6 @@ class AchievementsModal {
                     </div>
                 `;
             } else {
-                // Sprawdź kwalifikację dla hodler badge'y
                 let isQualified = false;
                 let showClaimButton = false;
                 
@@ -107,7 +104,6 @@ class AchievementsModal {
                     showClaimButton = !isClaimed && window.userAddress && window.gemBalance > 0;
                 }
                 
-                // Tooltip dla claimowanych badge'y
                 let tooltipText = badge.description;
                 if (isClaimed) {
                     if (badge.id === 'og') {
@@ -121,7 +117,6 @@ class AchievementsModal {
                     }
                 }
                 
-                // Dla badge'y które mają przycisk CLAIM
                 if (showClaimButton) {
                     html += `
                         <div class="achievement-card" data-tooltip="${tooltipText}">
@@ -132,7 +127,6 @@ class AchievementsModal {
                         </div>
                     `;
                 }
-                // Dla już claimowanych badge'y (bez kłódki, bez przycisku)
                 else if (isClaimed) {
                     html += `
                         <div class="achievement-card claimed" data-tooltip="${tooltipText}">
@@ -142,7 +136,6 @@ class AchievementsModal {
                         </div>
                     `;
                 }
-                // Dla odblokowanych ale nieclaimowanych (retro, support itp - ale one nie mają claim)
                 else if (isQualified && !isClaimed && badge.id !== 'og') {
                     html += `
                         <div class="achievement-card" data-tooltip="${badge.description}">
@@ -152,7 +145,6 @@ class AchievementsModal {
                         </div>
                     `;
                 }
-                // Dla zablokowanych badge'y
                 else {
                     html += `
                         <div class="achievement-card locked" data-tooltip="${badge.description}">
@@ -169,7 +161,6 @@ class AchievementsModal {
         html += '</div>';
         modalBody.innerHTML = html;
         
-        // Eventy dla przycisków CLAIM
         document.querySelectorAll('.achievement-claim-btn').forEach(btn => {
             btn.onclick = async (e) => {
                 e.stopPropagation();
