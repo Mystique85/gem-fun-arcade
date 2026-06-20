@@ -1,7 +1,7 @@
 // components/footer.js
 class FooterComponent {
     constructor() {
-        this.tokenAddress = '0xf8a02b86e09319e615534cd8ff034a527261072f';
+        this.tokenAddress = '0xd483d541E0B0F322b81B97764bA71602A853021e';
     }
 
     getHTML() {

@@ -11,8 +11,8 @@ if (typeof window.web3Initialized === 'undefined') {
 
     const MIN_GEM_REQUIRED = 10000;
     const TOKEN_DECIMALS = 18;
-    const TOKEN_ADDRESS = '0xf8a02b86e09319e615534cd8ff034a527261072f';
-    const GAME_WALLET_ADDRESS = '0xf8a02b86e09319e615534cd8ff034a527261072f';
+    const TOKEN_ADDRESS = '0xd483d541E0B0F322b81B97764bA71602A853021e';
+    const GAME_WALLET_ADDRESS = '0x443baEF78686Fc6b9e5e6DaEA24fe26a170c5ac8';
 
     const TOKEN_ABI = [
         {

@@ -38,7 +38,7 @@ function updateRequirementMessage(balance) {
     const tokenEcosystem = document.getElementById('tokenEcosystemSection');
     
     const minRequired = window.getMinGemRequired ? window.getMinGemRequired() : 10000;
-    const tokenAddress = '0xf8a02b86e09319e615534cd8ff034a527261072f';
+    const tokenAddress = '0xd483d541E0B0F322b81B97764bA71602A853021e';
     const buyLink = 'https://hashcoin.farm/gem';
     
     if (!window.userAddress) {

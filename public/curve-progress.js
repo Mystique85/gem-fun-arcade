@@ -1,4 +1,4 @@
-const FACTORY_ADDRESS = '0x25064346f8E910Ea710d93e15a0E24d0233e60F2';
+const FACTORY_ADDRESS = '0xea4831Df95738d6Ef0f2b47e5345fa75A2E59e86';
 const CURVE_TARGET = 300000000;
 
 const FACTORY_ABI = [{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"tokens","outputs":[{"name":"migrated","type":"bool"},{"name":"curveCompleted","type":"bool"},{"name":"sold","type":"uint256"},{"name":"raised","type":"uint256"},{"name":"miningReserve","type":"uint256"}],"type":"function"}];
@@ -18,7 +18,7 @@ async function updateCurveProgressUI() {
     
     try {
         const factoryContract = new window.web3.eth.Contract(FACTORY_ABI, FACTORY_ADDRESS);
-        const tokenData = await factoryContract.methods.tokens(TOKEN_ADDRESS).call();
+        const tokenData = await factoryContract.methods.tokens(window.TOKEN_ADDRESS || TOKEN_ADDRESS).call();
         
         const sold = Number(tokenData.sold) / 1e18;
         const percentage = (sold / CURVE_TARGET) * 100;
@@ -50,7 +50,9 @@ async function updateCurveProgressUI() {
             messageDiv.className = 'curve-message info';
             messageDiv.innerHTML = `⏳ Need ${(100 - percentage).toFixed(1)}% more to unlock migration`;
         }
-    } catch (err) {}
+    } catch (err) {
+        console.error('Curve progress error:', err);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
